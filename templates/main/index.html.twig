@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<div class="container">
+        {%  block menu %}
+            <div class="row">
+                <div class="col-12 col-xl-6">
+                    <div class="card"><a href="{{ path('order') }}">Złóż zamówienie</a></div>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <div class="card"><a href="">Twoje zamówienie</a></div>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <div class="card"><a href="">Historia</a></div>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <div class="card"><a href="">Statystyki</a></div>
+                </div>
+
+                {% endblock %}
+            </div>
+
+{% endblock %}
