@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+    <div class="container">
+        <h2>Zamówiłeś dzisiaj:</h2>
+        {%  for order in orders %}
+        <h1>{{ order.food}}{{ order.company }}{{ order.cost }}</h1>
+
+        {% endfor %}
+    </div>
+{% endblock %}

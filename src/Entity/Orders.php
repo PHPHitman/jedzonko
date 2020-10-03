@@ -43,9 +43,15 @@ class Orders
     private $Name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="date")
      */
-    private $Surname;
+    private $Date;
+
+    public function __construct()
+    {
+        $time = new \DateTime();
+        $this->Date = $time;
+    }
 
     public function getId(): ?int
     {
@@ -112,15 +118,17 @@ class Orders
         return $this;
     }
 
-    public function getSurname(): ?string
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->Surname;
+        return $this->Date;
     }
 
-    public function setSurname(string $Surname): self
+    public function setDate(\DateTimeInterface $Date): self
     {
-        $this->Surname = $Surname;
+        $this->Date = $Date;
 
         return $this;
     }
+
+
 }

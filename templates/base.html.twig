@@ -40,6 +40,18 @@
     {% endif %}
 
         {% block body %}
+            {%  block flashmessage %}
+                {%  for message in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {%  for message in app.flashes('removed') %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% endblock %}
             {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
