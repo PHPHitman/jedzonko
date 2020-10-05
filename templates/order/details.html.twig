@@ -4,10 +4,10 @@
 
 {% block body %}
     <div class="container">
-        <h2>Zamówiłeś dzisiaj:</h2>
-        {%  for order in orders %}
-        <h1>{{ order.food}}{{ order.company }}{{ order.cost }}</h1>
+        <h2>Szczegóły zamówienia:</h2>
 
-        {% endfor %}
+        <h1>{{ orders.food}}{{ orders.company }}{{ orders.cost }}</h1>
+
+
     </div>
 {% endblock %}

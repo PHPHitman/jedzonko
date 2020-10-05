@@ -6,6 +6,10 @@ body {
     margin-top:100px;
     width:50%;
 }
+.foodcard{
+    width:50%;
+    margin:auto;
+}
 .card{
 
     margin:25px;
@@ -15,4 +19,12 @@ body {
     text-align: center;
     align-items: center;
     justify-content: center;
+}
+.description{
+    text-align: center;
+    margin:auto;
+}
+.foodnav{
+    margin-top: 50px;
+    text-align: center;
 }

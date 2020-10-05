@@ -8,6 +8,7 @@ namespace App\Controller;
 use App\Entity\Orders;
 use App\Form\OrderType;
 use App\Repository\OrdersRepository;
+use App\Service\FunctionCheck;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Id;
@@ -19,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
-
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,22 +31,13 @@ class OrderController extends AbstractController
     /**
      * @Route("/order", name="order")
      * @param Request $request
+     * @param FunctionCheck $functionCheck
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function order(Request $request)
     {
-        $user = $this->getUser()->getUsername();
-        $array = explode(' ', $user);
-        $date = new \DateTime();
-        $result = $date->format('Y-m-d');
-        $array2 = explode(' ', $result);
 
 
-        $repository = $this->getDoctrine()->getRepository(Orders::class);
-        $orders = $repository->findBy(
-            ['Name' => $array, 'Date' => $array2]
-        );
-        if(!$orders) {
 
             $order = new Orders();
             $form = $this->createForm(OrderType::class, $order);
@@ -71,34 +63,21 @@ class OrderController extends AbstractController
             return $this->render('order/index.html.twig', [
                 'form' => $form->createView()
             ]);
-        }
-        $this->addFlash('removed','Złożyłeś już dzisiaj zamówienie. Przejdź do zakładki Twoje Zamówienia w celu edycji');
-        return $this->redirect($this->generateUrl('index'));
+
+
+   
     }
 
     /**
-     * @Route("/placed", name="placed")
+     * @Route("/details/{id}", name="details")
+     * @param Orders $orders
      * @return \Symfony\Component\HttpFoundation\Response
-     * @throws Exception
      */
-    public function placed (){
-        $user = $this->getUser()->getUsername();
-        $array = explode(' ', $user);
-        $date = new \DateTime();
-        $result = $date->format('Y-m-d');
-        $array2 = explode(' ', $result);
-
-
-        $repository = $this->getDoctrine()->getRepository(Orders::class);
-        $orders = $repository->findBy(
-            ['Name' => $array, 'Date' => $array2]
-
-
-        );
-
+    public function details(Orders $orders){
 
         return $this->render('order/details.html.twig',[
             'orders' => $orders
-            ]);
+        ]);
+
     }
 }
