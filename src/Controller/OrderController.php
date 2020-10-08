@@ -80,4 +80,18 @@ class OrderController extends AbstractController
         ]);
 
     }
+
+    /**
+     * @Route("/delete/{id}", name="delete")
+     * @param Orders $orders
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function delete(Orders $order){
+        $em= $this->getDoctrine()->getManager();
+        $em->remove($order);
+        $em->flush();
+        $this->addFlash('removed','Zamówienie zostało usunięte!');
+        return $this->redirect($this->generateUrl('index'));
+
+    }
 }

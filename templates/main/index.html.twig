@@ -2,35 +2,159 @@
 
 
 {% block body %}
+
+
+
 <div class="container">
     {{ block ('flashmessage', 'base.html.twig') }}
         {%  block menu %}
+
             <div class="foodcard">
 
                     <div class="description">
+                        {% if orders %}
                         <h2>Dzisiejsze zamówienie</h2><hr/>
-                        {%  for order in orders %}
-                         {{ order.food }}
-                            <button type="button" class="btn btn-success"><a href="{{ path('details', {id: order.id}) }}">Szczegóły</a></button>
-                            <button type="button" class="btn btn-success">Edytuj</button>
+
+                            <table class="table">
+
+                                <thead class="thead-dark">
+                                <tr>
+                                <th scope="col">Zamówienie</th>
+                                <th scope="col">Należność</th>
+                                <th scope="col">Działanie</th>
+                                </tr>
+                                </thead>
+
+
+                                <tbody>
+
+                                {%  for order in orders %}
+                                <tr>
+                                    <td>{{ order.food }}</td>
+                                    <td>{{ order.cost }} zł</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary btn-sm dropdown-toggle m-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Wybierz
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="{{ path('details', {id: order.id}) }}">Szczegóły</a>
+                                                <a class="dropdown-item" href="{{ path('details', {id: order.id}) }}">Edytuj</a>
+                                                <a class="dropdown-item" href="{{ path('delete', {id: order.id}) }}">Usuń</a>
+
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+
+
                         {% endfor %}
+                            </table>
+                        {% else %}
+
+
+                        {% endif %}
                     </div>
 
             </div>
+            <h2>Dania ciepłe</h2>
+            <div class="content">
 
+
+                <section class="food">
+
+                    <div>
+                        <img src="{{asset('build/frytki.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/schabowy.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/pizza.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/kebab.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/spaghetti.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/pierogi.jpg')}}">
+                    </div>
+                </section>
+
+            </div>
+            <h2>Napoje</h2>
+            <div class="content">
+
+
+                <section class="food">
+
+                    <div>
+                        <img src="{{asset('build/drinks/fanta.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/drinks/cola.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/drinks/tonic.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/drinks/mountaindew.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/drinks/sprite.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/drinks/tonic.jpg')}}">
+                    </div>
+                </section>
+
+            </div>
+            <h2>Desery</h2>
+            <div class="content">
+
+
+                <section class="food">
+
+                    <div>
+                        <img src="{{asset('build/desserts/sernik.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/desserts/serniknazimno.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/desserts/kremówka.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/desserts/pannacotta.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/desserts/szarlotka.jpg')}}">
+                    </div>
+                    <div>
+                        <img src="{{asset('build/desserts/karpatka.jpg')}}">
+                    </div>
+                </section>
+
+            </div>
 
             <div class="row">
                 <div class="col-12 col-xl-6">
-                    <div class="card"><a href="{{ path('order') }}">Złóż zamówienie</a></div>
+                    <div class="card"><a href="{{ path('order') }}"><img src="{{ asset('build/plus.png') }}" alt="dodaj"></a>Dodaj zamówienie</div>
+
                 </div>
                 <div class="col-12 col-xl-6">
-                    <div class="card"><a href="#">Historia</a></div>
+                    <div class="card" id="h"><a href="#">Historia</a></div>
                 </div>
                 <div class="col-12 col-xl-6">
-                    <div class="card"><a href="#">Statystyki</a></div>
+                    <div class="card"id="s"><a href="#">Statystyki</a></div>
                 </div>
             </div>
                 {% endblock %}
             </div>
+
 
 {% endblock %}

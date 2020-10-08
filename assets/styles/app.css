@@ -1,5 +1,10 @@
+*{
+    min-height: 0;
+    min-width: 0;
+}
+
 body {
-    background-color: lightgray;
+background-color: #aacd4e;
 }
 
 .container{
@@ -24,7 +29,25 @@ body {
     text-align: center;
     margin:auto;
 }
-.foodnav{
+.foodnav {
     margin-top: 50px;
     text-align: center;
+}
+.b{
+    width:75%;
+
+}
+.content{
+
+display: flex;
+    padding:auto;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+
+}
+.content img{
+    margin: auto;
+    width:10vw;
+    height: 10vw;
 }
