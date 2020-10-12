@@ -14,19 +14,20 @@ import './styles/app.css';
 import $ from 'jquery';
 import 'slick-carousel';
 
+$('#plus').hide();
 $(document).ready( function () {
     $('.food').slick({
         dots: true,
         infinite: true,
-        speed: 300,
+        speed: 600,
         slidesToShow: 4,
         slidesToScroll: 4,
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
                     infinite: true,
                     dots: true
                 }
@@ -51,4 +52,13 @@ $(document).ready( function () {
         ]
     });
 
+
 });
+
+
+
+
+
+
+
+

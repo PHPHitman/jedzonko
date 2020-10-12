@@ -38,9 +38,9 @@
                                                 Wybierz
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="{{ path('details', {id: order.id}) }}">Szczegóły</a>
-                                                <a class="dropdown-item" href="{{ path('details', {id: order.id}) }}">Edytuj</a>
-                                                <a class="dropdown-item" href="{{ path('delete', {id: order.id}) }}">Usuń</a>
+                                                <a class="dropdown-item" href="{{ path('order.details', {id: order.id}) }}">Szczegóły</a>
+                                                <a class="dropdown-item" href="{{ path('order.details', {id: order.id}) }}">Edytuj</a>
+                                                <a class="dropdown-item" href="{{ path('order.delete', {id: order.id}) }}">Usuń</a>
 
                                             </div>
                                         </div>
@@ -59,6 +59,27 @@
                     </div>
 
             </div>
+
+            <h2>Test</h2>
+
+            <div class="content">
+
+
+                <section class="food">
+
+                    {% for dessert in desserts %}
+                        <div>
+{#                            <a href="{{ path ('order.create', {id: dessert.id}) }}">#}
+                            <img src="{{'/uploads/' ~ dessert.image}}" class="picture">
+{#                            </a>#}
+
+
+                        </div>
+                    {% endfor %}
+
+                </section>
+
+            </div>
             <h2>Dania ciepłe</h2>
             <div class="content">
 
@@ -66,7 +87,9 @@
                 <section class="food">
 
                     <div>
-                        <img src="{{asset('build/frytki.jpg')}}">
+                        <img src="{{asset('build/frytki.jpg')}}" >
+
+
                     </div>
                     <div>
                         <img src="{{asset('build/schabowy.jpg')}}">
@@ -143,7 +166,7 @@
 
             <div class="row">
                 <div class="col-12 col-xl-6">
-                    <div class="card"><a href="{{ path('order') }}"><img src="{{ asset('build/plus.png') }}" alt="dodaj"></a>Dodaj zamówienie</div>
+{#                    <div class="card"><a href="{{ path('order.order') }}"><img src="{{ asset('build/plus.png') }}" alt="dodaj"></a>Dodaj zamówienie</div>#}
 
                 </div>
                 <div class="col-12 col-xl-6">

@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 
+use App\Entity\Food;
 use App\Entity\Orders;
 use App\Form\OrderType;
 use App\Repository\OrdersRepository;
@@ -26,12 +27,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 
+
+
 class OrderController extends AbstractController
+    /**
+     * @Route("/order", name="order.")
+     */
 {
+
+
     /**
      * @Route("/order", name="order")
      * @param Request $request
-     * @param FunctionCheck $functionCheck
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function order(Request $request)
@@ -65,7 +72,7 @@ class OrderController extends AbstractController
             ]);
 
 
-   
+
     }
 
     /**
@@ -83,7 +90,7 @@ class OrderController extends AbstractController
 
     /**
      * @Route("/delete/{id}", name="delete")
-     * @param Orders $orders
+     * @param Orders $order
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function delete(Orders $order){
