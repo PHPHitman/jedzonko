@@ -13,7 +13,7 @@ class FoodDisplay extends AbstractController
     public function select($category){
         $em = $this->getDoctrine()->getRepository(Food::class)
             ->findBy([
-                'category' => 3
+                'category' => $category
             ]);
         return $em;
 

@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Food;
 use App\Form\FoodAddType;
+use App\Service\AddToOrder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,13 +65,63 @@ class FoodController extends AbstractController
     }
 
     /**
-     * @Route("/show", name="create")
+     * @Route("/test", name="test")
      * @param Request $request
-     * @return Response
+     * @param $id
+     * @return JsonResponse|Response
      */
 
-    public function addToOrder()
-    {
+    public function ajaxAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+        $data=$_POST['id'];
 
+
+
+        $foods = $this->getDoctrine()
+            ->getRepository(Food::class)
+            ->findBy([
+                'id'=>$data
+            ]);
+
+        $jsonData=array();
+            $idx = 0;
+        foreach ($foods as $food){
+            $temp = array(
+            'name'=> $food->getName(),
+            'price' =>$food->getPrice());
+
+            $jsonData[$idx++]=$temp;
+        }
+
+        return new JsonResponse($jsonData);
+
+
+
+
+        } else {
+            return $this->render('main/index.html.twig');
+        }
     }
+
+//    public function ajaxAction(Request $request)
+//    {
+//        $foods = $this->getDoctrine()
+//            ->getRepository(Food::class)->findAll();
+//
+//        if ($request->isXmlHttpRequest() || $request->query->get('ShowJson')==1){
+//            $jsonData =array();
+//            $idx = 0;
+//            foreach($foods as $food) {
+//                $temp = array(
+//                    'name' => $food->getName(),
+//                    'price' => $food->getPrice(),
+//                );
+//                $jsonData[$idx++] = $temp;
+//            }
+//            return new JsonResponse($jsonData);
+//        }
+//        else{
+//            return $this->render('main/index.html.twig');
+//        }
+//    }
 }

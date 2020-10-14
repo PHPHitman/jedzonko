@@ -35,17 +35,6 @@ class MainController extends AbstractController
 
 
     }
-    /**
-     * @Route("/u", name="u")
-     * @param FunctionCheck $functionCheck
-     * @return Response
-     */
-    public function index2()
-    {
 
-        return $this->render('main/index2.html.twig',[
-
-        ]);
-    }
 
 }

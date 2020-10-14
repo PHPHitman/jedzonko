@@ -60,18 +60,17 @@
 
             </div>
 
-            <h2>Test</h2>
 
             <div class="content">
 
 
                 <section class="food">
 
-                    {% for dessert in desserts %}
+                    {% for food in foods %}
                         <div>
-{#                            <a href="{{ path ('order.create', {id: dessert.id}) }}">#}
-                            <img src="{{'/uploads/' ~ dessert.image}}" class="picture">
-{#                            </a>#}
+
+                            <img src="{{'/uploads/' ~ food.image}}" class="picture" data-product_id="{{ food.id }}">
+
 
 
                         </div>
@@ -80,100 +79,76 @@
                 </section>
 
             </div>
-            <h2>Dania ciepłe</h2>
+
+            <h2>Desery</h2>
+
             <div class="content">
 
 
                 <section class="food">
 
-                    <div>
-                        <img src="{{asset('build/frytki.jpg')}}" >
+                    {% for dessert in desserts %}
+                        <div>
+
+                            <img src="{{'/uploads/' ~ dessert.image}}" class="picture"  data-product_id="{{ dessert.id }}">
 
 
-                    </div>
-                    <div>
-                        <img src="{{asset('build/schabowy.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/pizza.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/kebab.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/spaghetti.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/pierogi.jpg')}}">
-                    </div>
+
+                        </div>
+                    {% endfor %}
+
                 </section>
 
             </div>
+
             <h2>Napoje</h2>
             <div class="content">
 
 
                 <section class="food">
 
-                    <div>
-                        <img src="{{asset('build/drinks/fanta.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/drinks/cola.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/drinks/tonic.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/drinks/mountaindew.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/drinks/sprite.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/drinks/tonic.jpg')}}">
-                    </div>
+                    {% for drink in drinks %}
+                        <div>
+
+                            <img src="{{'/uploads/' ~ drink.image}}" class="picture" data-product_id="{{ drink.id }}">
+
+
+                        </div>
+                    {% endfor %}
+
                 </section>
 
             </div>
-            <h2>Desery</h2>
-            <div class="content">
+
+    <table class="table">
+
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Zamówienie</th>
+            <th scope="col">Należność</th>
+            <th scope="col">Działanie</th>
+        </tr>
+        </thead>
 
 
-                <section class="food">
+        <tbody id="table">
+        <td>
 
-                    <div>
-                        <img src="{{asset('build/desserts/sernik.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/desserts/serniknazimno.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/desserts/kremówka.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/desserts/pannacotta.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/desserts/szarlotka.jpg')}}">
-                    </div>
-                    <div>
-                        <img src="{{asset('build/desserts/karpatka.jpg')}}">
-                    </div>
-                </section>
+        </td>
 
-            </div>
+        </tbody>
+    </table>
 
             <div class="row">
                 <div class="col-12 col-xl-6">
-{#                    <div class="card"><a href="{{ path('order.order') }}"><img src="{{ asset('build/plus.png') }}" alt="dodaj"></a>Dodaj zamówienie</div>#}
+                    <div class="card"><a href="{{ path('order.order') }}"><img src="{{ asset('build/plus.png') }}" alt="dodaj"></a>Dodaj zamówienie</div>
 
                 </div>
                 <div class="col-12 col-xl-6">
-                    <div class="card" id="h"><a href="#">Historia</a></div>
+                    <div class="card" id="h"><a href="{{ path('food.create') }}">Dodaj produkt</a></div>
                 </div>
                 <div class="col-12 col-xl-6">
-                    <div class="card"id="s"><a href="#">Statystyki</a></div>
+                    <div class="card"id="s"><a href={{ path('register') }}>Dodaj użytkownika</a></div>
                 </div>
             </div>
                 {% endblock %}

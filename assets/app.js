@@ -59,6 +59,60 @@ $(document).ready( function () {
 
 
 
+$(document).ready(function(){
+    $(".picture").on("click", function(event){
+
+var id = $(this).data('product_id');
+        // var value = $(this).data('value');
+        console.log(id);
+        // var ids = document.getElementById('picture').dataset.product_id;
+        // var id = $('.picture').dataset.product_id;
+
+        $.ajax({
+            url:        '/food/test',
+            type:       'POST',
+            dataType:   'json',
+            data: {
+                id: id
+            },
+                success: function(data, status) {
+
+
+                    // $('#food').append(e);
+                    if ($('#' + id).length) {
+                        alert('Produkt już dodany');
+                    } else {
+                        for (var i = 0; i < data.length; i++) {
+                            var food = data[0];
+
+
+                            var e = $('<tr>' +
+                                '<td><span id="name"></span></td>' +
+                                '<td><span id="price">zł</span></td>' +
+                                '<td><button class="btn btn-danger">USUN</button></td>' +
+                                '</tr>');
+
+                            $('#table').append(e);
+                            e.attr('id', id);
+
+
+                            $('#name', e).append().html(food['name']);
+                            $('#price', e).append().html(food['price']);
+                            // $('#product').append(e);
+
+                        }
+                    }
+
+                },
+
+                    error : function (xhr, textStatus, errorThrown) {
+                        alert('Ajax request failed.');
+                    }});
+                 }
+            );
+});
+
+
 
 
 
