@@ -55,13 +55,7 @@ position: relative;
 .food img:hover{
     cursor: pointer;
 }
-#order{
-    width:100%;
+.btn{
 
-    font-size: 20px;
-}
-
-.menu{
-    display:flex;
-    width:
+    margin:30px;
 }

@@ -57,6 +57,18 @@ $(document).ready( function () {
 
 
 
+var arr= [];
+
+
+
+function putIdIntoArray($id){
+
+        arr.push({
+            "id":$id,
+        });
+}
+
+
 
 
 $(document).ready(function(){
@@ -64,24 +76,24 @@ $(document).ready(function(){
 
 var id = $(this).data('product_id');
         // var value = $(this).data('value');
-        console.log(id);
+
         // var ids = document.getElementById('picture').dataset.product_id;
         // var id = $('.picture').dataset.product_id;
-
-        $.ajax({
+            if ($('#' + id).length) {
+                alert('Produkt już dodany');
+            }
+            else {
+            $.ajax({
             url:        '/food/test',
             type:       'POST',
             dataType:   'json',
             data: {
-                id: id
+                id: id,
+                arr:JSON.stringify(arr)
             },
                 success: function(data, status) {
-
-
                     // $('#food').append(e);
-                    if ($('#' + id).length) {
-                        alert('Produkt już dodany');
-                    } else {
+
                         for (var i = 0; i < data.length; i++) {
                             var food = data[0];
 
@@ -89,28 +101,67 @@ var id = $(this).data('product_id');
                             var e = $('<tr>' +
                                 '<td><span id="name"></span></td>' +
                                 '<td><span id="price">zł</span></td>' +
-                                '<td><button class="btn btn-danger">USUN</button></td>' +
+                                '<td id="x"><button class="delete">USUN</button></td>' +
                                 '</tr>');
 
                             $('#table').append(e);
                             e.attr('id', id);
 
+                            $("#x").attr('id', id);
 
                             $('#name', e).append().html(food['name']);
                             $('#price', e).append().html(food['price']);
                             // $('#product').append(e);
-
                         }
-                    }
+
+                    putIdIntoArray(id);
+
+
 
                 },
 
                     error : function (xhr, textStatus, errorThrown) {
                         alert('Ajax request failed.');
-                    }});
-                 }
+                    },
+
+
+
+                 },
+
             );
+}})});
+
+function callFun() {
+
+
+    $.ajax({
+
+        url: '/food/collect',
+        success: function (data) {
+            alert(data);
+        },
+        error : function (xhr, textStatus, errorThrown) {
+            alert('Nie wczytano funkcji');
+        }
+    })
+
+
+}
+
+
+//delete function
+$(document).on('click', '.delete', function(){
+
+    var id = $(this).parent().attr('id');
+
+    var row = document.getElementById(id);
+
+    $(row).remove();
+
 });
+
+
+
 
 
 

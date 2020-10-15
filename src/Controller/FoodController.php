@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Food;
 use App\Form\FoodAddType;
 use App\Service\AddToOrder;
+use App\Service\FoodDisplay;
+use App\Service\OrderPicker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -67,14 +69,18 @@ class FoodController extends AbstractController
     /**
      * @Route("/test", name="test")
      * @param Request $request
-     * @param $id
+     * @param OrderPicker $orderPicker
      * @return JsonResponse|Response
      */
 
-    public function ajaxAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {
+    public function ajaxAction(Request $request, OrderPicker $orderPicker) {
         $data=$_POST['id'];
 
+
+
+
+
+        if ($request->isXmlHttpRequest()) {
 
 
         $foods = $this->getDoctrine()
@@ -83,25 +89,61 @@ class FoodController extends AbstractController
                 'id'=>$data
             ]);
 
+        //Add id to array
+
         $jsonData=array();
             $idx = 0;
+
         foreach ($foods as $food){
+
             $temp = array(
             'name'=> $food->getName(),
             'price' =>$food->getPrice());
 
             $jsonData[$idx++]=$temp;
+
+
+            $array= json_decode($_POST['arr']);
+//
+            $orderPicker->insert($array);
+
         }
 
         return new JsonResponse($jsonData);
+        }
 
-
-
-
-        } else {
+        else {
             return $this->render('main/index.html.twig');
         }
+
     }
+
+    /**
+     * @Route("/collect", name="collect")
+     * @param OrderPicker $orderPicker
+     * @return JsonResponse|Response
+     */
+
+    public function test(OrderPicker $orderPicker)
+    {
+
+        $x= $orderPicker->output();
+
+//        $ids = implode(" ",$x);
+        $food= $this->getDoctrine()->getRepository(Food::class)
+            ->findBy(['id' => $x]);
+
+        return $this->render('food/collect.html.twig',[
+            'orders'=> $food
+        ]);
+
+    }
+
+
+
+
+
+
 
 //    public function ajaxAction(Request $request)
 //    {
