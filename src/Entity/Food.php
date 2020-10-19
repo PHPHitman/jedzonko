@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FoodRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +38,18 @@ class Food
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="food")
      */
     private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FoodOrders::class, mappedBy="product_id")
+     */
+    private $order;
+
+    public function __construct()
+    {
+        $this->order = new ArrayCollection();
+    }
+
+  
 
 
 
@@ -91,6 +105,39 @@ class Food
 
         return $this;
     }
+
+    /**
+     * @return Collection|FoodOrders[]
+     */
+    public function getOrder(): Collection
+    {
+        return $this->order;
+    }
+
+    public function addOrder(FoodOrders $order): self
+    {
+        if (!$this->order->contains($order)) {
+            $this->order[] = $order;
+            $order->setProductId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(FoodOrders $order): self
+    {
+        if ($this->order->contains($order)) {
+            $this->order->removeElement($order);
+            // set the owning side to null (unless already changed)
+            if ($order->getProductId() === $this) {
+                $order->setProductId(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 
 
 }

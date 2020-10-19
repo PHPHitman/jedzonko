@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Food;
+use App\Entity\FoodOrders;
 use App\Form\FoodAddType;
 use App\Service\AddToOrder;
 use App\Service\FoodDisplay;
+use App\Service\OrderDisplay;
 use App\Service\OrderPicker;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,9 +62,9 @@ class FoodController extends AbstractController
             }
         }
 
-            return $this->render('food/index.html.twig', [
-                'form' =>$form->createView()
-            ]);
+        return $this->render('food/index.html.twig', [
+            'form' => $form->createView()
+        ]);
 
 
     }
@@ -73,46 +76,37 @@ class FoodController extends AbstractController
      * @return JsonResponse|Response
      */
 
-    public function ajaxAction(Request $request, OrderPicker $orderPicker) {
-        $data=$_POST['id'];
-
-
-
-
+    public function ajaxAction(Request $request, OrderPicker $orderPicker)
+    {
+        $data = $_POST['id'];
+//        $array=$_POST['array'];
 
         if ($request->isXmlHttpRequest()) {
 
 
-        $foods = $this->getDoctrine()
-            ->getRepository(Food::class)
-            ->findBy([
-                'id'=>$data
-            ]);
+            $foods = $this->getDoctrine()
+                ->getRepository(Food::class)
+                ->findBy([
+                    'id' => $data
+                ]);
 
-        //Add id to array
+            //Add id to array
 
-        $jsonData=array();
+            $jsonData = array();
             $idx = 0;
 
-        foreach ($foods as $food){
+            foreach ($foods as $food) {
 
-            $temp = array(
-            'name'=> $food->getName(),
-            'price' =>$food->getPrice());
+                $temp = array(
+                    'name' => $food->getName(),
+                    'price' => $food->getPrice());
 
-            $jsonData[$idx++]=$temp;
+                $jsonData[$idx++] = $temp;
+            }
 
 
-            $array= json_decode($_POST['arr']);
-//
-            $orderPicker->insert($array);
-
-        }
-
-        return new JsonResponse($jsonData);
-        }
-
-        else {
+            return new JsonResponse($jsonData);
+        } else {
             return $this->render('main/index.html.twig');
         }
 
@@ -120,50 +114,83 @@ class FoodController extends AbstractController
 
     /**
      * @Route("/collect", name="collect")
+     * @param Request $request
      * @param OrderPicker $orderPicker
      * @return JsonResponse|Response
      */
 
-    public function test(OrderPicker $orderPicker)
+    public function test(Request $request, OrderPicker $orderPicker)
     {
 
-        $x= $orderPicker->output();
+        $array = json_decode($_POST['array']);
 
-//        $ids = implode(" ",$x);
-        $food= $this->getDoctrine()->getRepository(Food::class)
-            ->findBy(['id' => $x]);
+        if ($request->isXmlHttpRequest()) {
 
-        return $this->render('food/collect.html.twig',[
-            'orders'=> $food
-        ]);
+            $orderPicker->insert($array);
+
+            $this->saveOrder($orderPicker);
+
+            return new Response();
+
+        } else {
+            return new Response('This is not ajax!', 400);
+
+        }
 
     }
 
+    public function saveOrder(OrderPicker $orderPicker)
+    {
+        $idArray = $orderPicker->select();
+        $user = $this->getUser()->getUsername();
 
+        $entityManager = $this->getDoctrine()->getManager();
 
+        $Order = new FoodOrders();
 
+        $Order->setUser($user);
+        $Order->setProducts($idArray);
+        $entityManager->persist($Order);
+        $entityManager->flush();
+        $this->addFlash('success', 'Zamówienie złożone!');
 
+    }
 
+    /**
+     * @Route("/show", name="show")
+     * @param Request $request
+     * @param OrderPicker $orderPicker
+     * @return JsonResponse|Response
+     */
 
-//    public function ajaxAction(Request $request)
-//    {
-//        $foods = $this->getDoctrine()
-//            ->getRepository(Food::class)->findAll();
-//
-//        if ($request->isXmlHttpRequest() || $request->query->get('ShowJson')==1){
-//            $jsonData =array();
-//            $idx = 0;
-//            foreach($foods as $food) {
-//                $temp = array(
-//                    'name' => $food->getName(),
-//                    'price' => $food->getPrice(),
-//                );
-//                $jsonData[$idx++] = $temp;
-//            }
-//            return new JsonResponse($jsonData);
-//        }
-//        else{
-//            return $this->render('main/index.html.twig');
-//        }
-//    }
+    public function show(Request $request)
+    {
+
+        if ($request->isXmlHttpRequest()) {
+
+            $date = new \DateTime();
+
+            $foods = $this->getDoctrine()
+                ->getRepository(FoodOrders::class)->findBy([
+                    'data'=>$date
+                ]);
+            $productsArray=array();
+            $index=0;
+
+            foreach($foods as $food) {
+                $temp=array(
+                    'foods' => $food->getProducts(),
+                    'id'=>$food->getId(),
+                    'name'=>$food->getUser()
+                    );
+
+                $productsArray[$index]=$temp;
+
+            }
+            return new JsonResponse($productsArray);
+
+        } else {
+            return $this->render('main/index.html.twig');
+        }
+    }
 }
