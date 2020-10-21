@@ -2,14 +2,43 @@
 
 
 {% block body %}
+<div class="body_container">
+    <div class="menu">
+        <ul>
+
+            <li><a href={{ path('register') }}>Dodaj użytkownika</a></li>
+            <li><a href="{{ path('food.create') }}">Dodaj produkt</a></li>
 
 
+        </ul>
+    </div>
+    <div class="box">
 
 <div class="container">
     {{ block ('flashmessage', 'base.html.twig') }}
 
+    <div class="admin_list_orders">
+        <table class="table">
 
-        {%  block menu %}
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Zamówienie</th>
+                <th scope="col">Należność</th>
+                <th scope="col">Działanie</th>
+            </tr>
+            </thead>
+
+
+            <tbody id="table">
+
+
+            </tbody>
+
+        </table>
+
+        <button class="btn btn-info" id="submit" >Złóż zamówienie</button>
+    </div>
+
             <div class="sidebar">
                 <table class="table">
 
@@ -30,88 +59,36 @@
                 </table>
 
                 <button class="btn btn-info" id="submit" >Złóż zamówienie</button>
-                <button class="btn btn-info" id="show" >Pokaż zamówienia</button>
+            </div>
+
+            <div class="orders">
+                <h2>Twoje dzisiejsze zamówienie</h2><hr/>
+                <table class="table">
+
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Produkt</th>
+                        <th scope="col">Cena</th>
+
+                    </tr>
+                    </thead>
+
+
+                    <tbody id="orders">
+
+
+                    </tbody>
+
+                </table>
+
+                <div class="buttons">
+                    <button class="btn btn-warning" id="edit_btn">Edytuj</button>
+                    <button class="btn btn-danger float-right delete_all" id="delete_all" >Usuń</button>
+                </div>
 
 
             </div>
-{#            <div class="orders">#}
-{#                <h2>Dzisiejsze zamówienia</h2><hr/>#}
-{#                <table class="table">#}
 
-{#                    <thead class="thead-dark">#}
-{#                    <tr>#}
-{#                        <th scope="col">Zamówienie</th>#}
-{#                        <th scope="col">Należność</th>#}
-{#                        <th scope="col">Działanie</th>#}
-{#                    </tr>#}
-{#                    </thead>#}
-
-
-{#                    <tbody>#}
-{#                    {% for order in orders %}#}
-{#                    <tr>#}
-{#                        <td>{{ orders.id }}</td>#}
-{#                        <td>{{ orders. }}</td>#}
-{#                        <td>{{ orders.id }}</td>#}
-{#                    </tr>#}
-
-{#                    </tbody>#}
-
-{#                </table>#}
-
-
-{#            </div>#}
-
-            <div class="foodcard">
-
-                    <div class="description">
-                        {% if orders %}
-                        <h2>Dzisiejsze zamówienie</h2><hr/>
-
-                            <table class="table">
-
-                                <thead class="thead-dark">
-                                <tr>
-                                <th scope="col">Zamówienie</th>
-                                <th scope="col">Należność</th>
-                                <th scope="col">Działanie</th>
-                                </tr>
-                                </thead>
-
-
-                                <tbody>
-
-                                {%  for order in orders %}
-                                <tr>
-                                    <td>{{ order.food }}</td>
-                                    <td>{{ order.cost }} zł</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary btn-sm dropdown-toggle m-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Wybierz
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="{{ path('order.details', {id: order.id}) }}">Szczegóły</a>
-                                                <a class="dropdown-item" href="{{ path('order.details', {id: order.id}) }}">Edytuj</a>
-                                                <a class="dropdown-item" href="{{ path('order.delete', {id: order.id}) }}">Usuń</a>
-
-                                            </div>
-                                        </div>
-
-                                    </td>
-                                </tr>
-                                </tbody>
-
-
-                        {% endfor %}
-                            </table>
-                        {% else %}
-
-
-                        {% endif %}
-                    </div>
-
-            </div>
 
 
             <div class="content">
@@ -174,21 +151,43 @@
             </div>
 
 
+    {% if is_granted('ROLE_ADMIN') %}
 
-            <div class="row">
-                <div class="col-12 col-xl-6">
-                    <div class="card"><a href="{{ path('order.order') }}"><img src="{{ asset('build/plus.png') }}" alt="dodaj"></a>Dodaj zamówienie</div>
+
+        <div class="users_order">
+            <h2>Dzisiejsze zamówienia:</h2><hr/>
+
+                <table class="table">
+
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Użytkownik</th>
+                        <th scope="col">Produkty</th>
+                        <th scope="col">Cena</th>
+                        <th scope="col">Status</th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody id="user_orders">
+
+                    </tbody>
+
+                </table>
+
+                <div class="buttons">
 
                 </div>
-                <div class="col-12 col-xl-6">
-                    <div class="card" id="h"><a href="{{ path('food.create') }}">Dodaj produkt</a></div>
-                </div>
-                <div class="col-12 col-xl-6">
-                    <div class="card"id="s"><a href={{ path('register') }}>Dodaj użytkownika</a></div>
-                </div>
+        </div>
+
+    {% endif %}
+
             </div>
-                {% endblock %}
-            </div>
+    </div>
+</div>
 
+    {% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    {% endblock %}
 
 {% endblock %}

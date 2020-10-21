@@ -8,6 +8,7 @@
 import './styles/app.css';
 import './js/slick.js';
 import './js/ajax.js';
+import './js/displayOrdersForAdmin.js';
 
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.

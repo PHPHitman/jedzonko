@@ -31,6 +31,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('slick', './assets/js/slick.js')
     .addEntry('ajax', './assets/js/ajax.js')
+    .addEntry('orders', './assets/js/displayOrdersForAdmin.js')
 
 
     //.addEntry('page1', './assets/page1.js')

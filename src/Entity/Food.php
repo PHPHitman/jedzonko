@@ -40,16 +40,14 @@ class Food
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=FoodOrders::class, mappedBy="product_id")
+     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="Products")
      */
-    private $order;
+    private $orders;
 
     public function __construct()
     {
-        $this->order = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
-
-  
 
 
 
@@ -107,35 +105,36 @@ class Food
     }
 
     /**
-     * @return Collection|FoodOrders[]
+     * @return Collection|Orders[]
      */
-    public function getOrder(): Collection
+    public function getOrders(): Collection
     {
-        return $this->order;
+        return $this->orders;
     }
 
-    public function addOrder(FoodOrders $order): self
+    public function addOrder(Orders $order): self
     {
-        if (!$this->order->contains($order)) {
-            $this->order[] = $order;
-            $order->setProductId($this);
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setProducts($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(FoodOrders $order): self
+    public function removeOrder(Orders $order): self
     {
-        if ($this->order->contains($order)) {
-            $this->order->removeElement($order);
+        if ($this->orders->contains($order)) {
+            $this->orders->removeElement($order);
             // set the owning side to null (unless already changed)
-            if ($order->getProductId() === $this) {
-                $order->setProductId(null);
+            if ($order->getProducts() === $this) {
+                $order->setProducts(null);
             }
         }
 
         return $this;
     }
+
 
 
 

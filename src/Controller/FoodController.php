@@ -23,6 +23,26 @@ class FoodController extends AbstractController
      */
 {
     /**
+     * @Route("/check", name="check")
+     * @param Request $request
+     * @param OrderDisplay $orderDisplay
+     * @return Response
+     */
+    public function checkIfOrderExist(Request $request,OrderDisplay $orderDisplay){
+        if ($request->isXmlHttpRequest()) {
+            $status=$orderDisplay->checkIfOrderExist();
+            if($status){
+                $status=1;
+            }else{
+                $status=0;
+            }
+          return new Response( $status);
+        }else{
+            return $this->render('main/index.html.twig');
+        }
+
+    }
+    /**
      * @Route("/create", name="create")
      * @param Request $request
      * @return Response
@@ -70,7 +90,7 @@ class FoodController extends AbstractController
     }
 
     /**
-     * @Route("/test", name="test")
+     * @Route("/add", name="add")
      * @param Request $request
      * @param OrderPicker $orderPicker
      * @return JsonResponse|Response
@@ -113,13 +133,13 @@ class FoodController extends AbstractController
     }
 
     /**
-     * @Route("/collect", name="collect")
+     * @Route("/save", name="save")
      * @param Request $request
      * @param OrderPicker $orderPicker
      * @return JsonResponse|Response
      */
 
-    public function test(Request $request, OrderPicker $orderPicker)
+    public function saveOrder(Request $request, OrderPicker $orderPicker)
     {
 
         $array = json_decode($_POST['array']);
@@ -128,9 +148,7 @@ class FoodController extends AbstractController
 
             $orderPicker->insert($array);
 
-            $this->saveOrder($orderPicker);
-
-            return new Response();
+            return new Response('Zamowienie złożone');
 
         } else {
             return new Response('This is not ajax!', 400);
@@ -139,55 +157,20 @@ class FoodController extends AbstractController
 
     }
 
-    public function saveOrder(OrderPicker $orderPicker)
-    {
-        $idArray = $orderPicker->select();
-        $user = $this->getUser()->getUsername();
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $Order = new FoodOrders();
-
-        $Order->setUser($user);
-        $Order->setProducts($idArray);
-        $entityManager->persist($Order);
-        $entityManager->flush();
-        $this->addFlash('success', 'Zamówienie złożone!');
-
-    }
-
     /**
      * @Route("/show", name="show")
      * @param Request $request
-     * @param OrderPicker $orderPicker
+     * @param OrderDisplay $orderDisplay
      * @return JsonResponse|Response
      */
 
-    public function show(Request $request)
+    public function show(Request $request, OrderDisplay $orderDisplay)
     {
 
         if ($request->isXmlHttpRequest()) {
 
-            $date = new \DateTime();
-
-            $foods = $this->getDoctrine()
-                ->getRepository(FoodOrders::class)->findBy([
-                    'data'=>$date
-                ]);
-            $productsArray=array();
-            $index=0;
-
-            foreach($foods as $food) {
-                $temp=array(
-                    'foods' => $food->getProducts(),
-                    'id'=>$food->getId(),
-                    'name'=>$food->getUser()
-                    );
-
-                $productsArray[$index]=$temp;
-
-            }
-            return new JsonResponse($productsArray);
+            $foodDetails=$orderDisplay->display();
+            Return new JsonResponse($foodDetails);
 
         } else {
             return $this->render('main/index.html.twig');

@@ -10,6 +10,7 @@ use App\Entity\Orders;
 use App\Form\OrderType;
 use App\Repository\OrdersRepository;
 use App\Service\FunctionCheck;
+use Cassandra\Date;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Id;
@@ -22,6 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -101,4 +103,100 @@ class OrderController extends AbstractController
         return $this->redirect($this->generateUrl('index'));
 
     }
+
+    /**
+     * @Route("/delete/all", name="delete")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteAllOrders(Request $request){
+
+        if ($request->isXmlHttpRequest()) {
+            $date = new DateTime;
+
+            $user=$this->getUser()->getUsername();
+
+        $orders=$this->getDoctrine()
+            ->getRepository(Orders::class)
+            ->findBy([
+                'Name'=>$user,
+                'Date'=>$date
+            ]);
+            $em= $this->getDoctrine()->getManager();
+            foreach($orders as $order){
+                $em->remove($order);
+                $em->flush();
+            }
+
+
+            Return new JsonResponse('Zamówienie zostało usunięte');
+    }
+
+    }
+
+    /**
+     * @Route("/made", name="made")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function showMadeOrders(Request $request){
+        if($request->isXmlHttpRequest()){
+
+            $date = new DateTime();
+            $orders=$this->getDoctrine()->getRepository(Orders::class)->findBy(
+                ['Date'=>$date]);
+            $food=$this->getDoctrine()->getRepository(Food::class);
+
+            $ordersArray=array();
+            $counter=0;
+
+            foreach($orders as $order) {
+
+                $food=$order->getProducts();
+
+                $temp = array(
+
+
+                    'user' => $order->getName(),
+                    'status' => $order->getStatus(),
+                    'price'=>$food->getPrice(),
+                    'product'=>$food->getName()
+
+                );
+
+                $ordersArray[$counter]=$temp;
+                $counter++;
+            }
+
+            Return new JsonResponse($ordersArray);
+
+
+        }
+        else{
+
+        }
+    }
+
+//        /**
+//         * @Route("/delete", name="delete")
+//         * @param Request $request
+//         * @return JsonResponse
+//         */
+//        public function editOrders(Request $request){
+//
+//            $order =$([])
+//            if($request->isXmlHttpRequest()){
+//
+//
+//                }
+//
+//                Return new JsonResponse();
+//
+//
+//            }
+//            else{
+//
+//            }
+//    }
+
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrdersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,25 +19,6 @@ class Orders
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Food;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $Quantity;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Company;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $Cost;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -47,10 +30,25 @@ class Orders
      */
     private $Date;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Food::class, inversedBy="orders")
+     */
+    private $Products;
+
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status;
+
+
+
     public function __construct()
     {
         $time = new \DateTime();
         $this->Date = $time;
+        $this->status='niedostarczone';
+
     }
 
     public function getId(): ?int
@@ -58,50 +56,16 @@ class Orders
         return $this->id;
     }
 
-    public function getFood(): ?string
+
+
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->Food;
+        return $this->Date;
     }
 
-    public function setFood(string $Food): self
+    public function setDate(\DateTimeInterface $Date): self
     {
-        $this->Food = $Food;
-
-        return $this;
-    }
-
-    public function getQuantity(): ?int
-    {
-        return $this->Quantity;
-    }
-
-    public function setQuantity(int $Quantity): self
-    {
-        $this->Quantity = $Quantity;
-
-        return $this;
-    }
-
-    public function getCompany(): ?string
-    {
-        return $this->Company;
-    }
-
-    public function setCompany(string $Company): self
-    {
-        $this->Company = $Company;
-
-        return $this;
-    }
-
-    public function getCost(): ?int
-    {
-        return $this->Cost;
-    }
-
-    public function setCost(int $Cost): self
-    {
-        $this->Cost = $Cost;
+        $this->Date = $Date;
 
         return $this;
     }
@@ -118,17 +82,32 @@ class Orders
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getProducts(): ?Food
     {
-        return $this->Date;
+        return $this->Products;
     }
 
-    public function setDate(\DateTimeInterface $Date): self
+    public function setProducts(?Food $Products): self
     {
-        $this->Date = $Date;
+        $this->Products = $Products;
 
         return $this;
     }
+
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+
 
 
 }
