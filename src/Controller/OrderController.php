@@ -18,6 +18,7 @@ use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Exception;
 use http\Env\Response;
+use PhpParser\Node\Stmt\Return_;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -45,8 +46,6 @@ class OrderController extends AbstractController
      */
     public function order(Request $request)
     {
-
-
 
             $order = new Orders();
             $form = $this->createForm(OrderType::class, $order);
@@ -91,20 +90,38 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="delete")
-     * @param Orders $order
+     * @Route("/delete/single", name="delete_single")
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function delete(Orders $order){
-        $em= $this->getDoctrine()->getManager();
-        $em->remove($order);
-        $em->flush();
-        $this->addFlash('removed','Zamówienie zostało usunięte!');
-        return $this->redirect($this->generateUrl('index'));
+    public function deleteFromMadeOrder(Request $request)
+    {
 
+        if ($request->isXmlHttpRequest()) {
+
+            $date = new DateTime;
+            $user = $this->getUser()->getUsername();
+
+            $id=$_POST['id'];
+            $orders = $this->getDoctrine()
+                ->getRepository(Orders::class)
+                ->findBy([
+                    'date'=>$date,
+                    'user'=>$user,
+                    'products_id'=>$id
+                ]);
+
+            $em = $this->getDoctrine()->getManager();
+
+                $em->remove($orders);
+                $em->flush();
+
+            return new JsonResponse('Zamówienie zostało usunięte');
+        }
     }
 
-    /**
+
+        /**
      * @Route("/delete/all", name="delete")
      * @param Request $request
      * @return JsonResponse
@@ -139,41 +156,80 @@ class OrderController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function showMadeOrders(Request $request){
-        if($request->isXmlHttpRequest()){
+    public function showMadeOrders(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
 
             $date = new DateTime();
-            $orders=$this->getDoctrine()->getRepository(Orders::class)->findBy(
-                ['Date'=>$date]);
-            $food=$this->getDoctrine()->getRepository(Food::class);
+            $orders = $this->getDoctrine()->getRepository(Orders::class)->findBy(
+                ['Date' => $date]);
+            $food = $this->getDoctrine()->getRepository(Food::class);
 
-            $ordersArray=array();
-            $counter=0;
+            $ordersArray = array();
+            $counter = 0;
+            $user = '';
 
-            foreach($orders as $order) {
+            foreach ($orders as $order) {
 
-                $food=$order->getProducts();
+                $food = $order->getProducts();
+                $id=$order->getId();
+
 
                 $temp = array(
 
-
                     'user' => $order->getName(),
                     'status' => $order->getStatus(),
-                    'price'=>$food->getPrice(),
-                    'product'=>$food->getName()
+                    'price' => $food->getPrice(),
+                    'product' => $food->getName(),
+                    'id' => $id
 
                 );
 
-                $ordersArray[$counter]=$temp;
+
+                $ordersArray[$counter] = $temp;
                 $counter++;
             }
 
-            Return new JsonResponse($ordersArray);
+            return new JsonResponse($ordersArray);
 
+
+        } else {
+
+        }
+
+    }
+
+    /**
+     * @Route("/status", name="status")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function changeStatus(Request $request){
+
+        $date = new DateTime();
+
+        $id=$_POST['id'];
+        $status=$_POST['status'];
+//        var_dump($status);
+        if($request->isXmlHttpRequest()){
+
+           $em= $this->getDoctrine()->getManager();
+            $orders=$this->getDoctrine()->getRepository(Orders::class)
+                ->findBy(['Name'=>$id,
+                    'Date'=>$date]);
+
+            foreach($orders as $order) {
+
+                $order->setStatus($status);
+                $em->persist($order);
+                $em->flush();
+            }
+
+            Return new JsonResponse('Status zmieniony');
 
         }
         else{
-
+            Return new JsonResponse('Wystąpił błąd');
         }
     }
 

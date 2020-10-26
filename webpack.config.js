@@ -32,6 +32,9 @@ Encore
     .addEntry('slick', './assets/js/slick.js')
     .addEntry('ajax', './assets/js/ajax.js')
     .addEntry('orders', './assets/js/displayOrdersForAdmin.js')
+    .addEntry('search', './assets/js/search.js')
+    .addEntry('swap', './assets/js/SwapDivs.js')
+    .addEntry('edit', './assets/js/editMadeOrders.js')
 
 
     //.addEntry('page1', './assets/page1.js')

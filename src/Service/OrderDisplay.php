@@ -46,31 +46,37 @@ class OrderDisplay extends AbstractController
         $productDetails = array();
         $counter = 0;
         $totalPrice=0;
+        $id='';
 
         if($orders) {
             foreach ($orders as $order) {
 
                 $food = $order->getProducts();
 
-
-
                 $temp = array(
                     'id'=>$food->getId(),
                     'product' => $food->getName(),
                     'price' => $food->getPrice(),
                     'category' => $food->getCategory(),
+                    'orderId'=>$order->getId()
                 );
 
 
                 $productDetails[$counter] = $temp;
                 $counter++;
                 $totalPrice+=$food->getPrice();
+                $id=$order->getId();
+
 
 
             }
 
+            $status= $this->getDoctrine()->getRepository(Orders::class)
+                ->find($id)->getStatus();
             $productDetails[$counter]=array(
-                'total_price'=>$totalPrice
+                'total_price'=>$totalPrice,
+                'status'=>$status
+
             );
 
             return $productDetails;

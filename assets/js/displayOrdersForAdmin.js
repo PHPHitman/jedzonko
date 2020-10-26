@@ -1,9 +1,20 @@
 import $ from "jquery";
 
 $(document).ready(function(){
-    $('.delete').show();
+
 displayOrders();
-    document.getElementById("edit_btn").addEventListener("click", editOrder);
+
+
+
+
+});
+
+$(document).on('click', '.status_pending', function() {
+    changeStatus($(this), 'w trakcie');
+});
+
+$(document).on('click','.status_delivered', function(){
+    changeStatus($(this), 'dostarczone');
 
 });
 
@@ -17,7 +28,7 @@ function displayOrders(){
 
             success: function (data) {
 
-                var user;
+                var user=data[i];
                 var insertUser;
                 var insertPrice=null;
                 var status;
@@ -29,49 +40,56 @@ function displayOrders(){
                 for (var i = 0; i < data.length; i++) {
 
                     var order = data[i];
+                    totalPrice+=order['price'];
+                    var id=order['id'];
 
 
                     if(user===order['user']) {
-                        insertUser='';
-                        status=''
+
 
                     }else{
                         user=order['user'];
                         insertUser=order['user'];
                         status=order['status'];
-                        totalPrice+=order['price'];
-                        
 
+                    var e = $('<tr id="info">' +
+                        '<td><span class="user"></span></td>' +
+                        '<td></td>' +
+                        // '<td><span id="total"></span></td>' +
+                        '<td>'+
+                        '<td><span class="status"></span></td>' +
+                        '<td>'+
+                                '<button class="status_pending" id="pending" >W trakcie</button>'+
+                                '<button  class="status_delivered" id="delivered" >Dostarczone</button>'+
+                    '</td>'+
+                        '</tr>');
+
+
+                    $('#user_orders').append(e);
+
+
+
+                    $('.user', e).append().html(user);
+                    $('.status', e).append().html(order['status']);
+                    $('#delivered').attr('id', id);
+                    $('#pending').attr('id',id);
+                    $("#info").attr('id', order.user);
+
+                    user = order['user'];
                     }
 
-
-
-                    // if(name===order['user']) {
-                    //     insertName='';
-                    //     status='';
-                    // }else{
-                    //     name=order['user'];
-                    //     insertName=order['user'];
-                    //     status=order['status'];
-                    // }
-
-                        console.table(data[i]);
                         var e = $('<tr>' +
-                            '<td><span class="name"></span></td>' +
+                            '<td><span></span></td>' +
                             '<td><span class="product"></span></td>' +
                             '<td><span class="price"></span></td>' +
-                            '<td><span class="status"></span></td>' +
-
+                            '<td></td>'+
                             '</tr>');
 
                         $('#user_orders').append(e);
 
 
-                        $('.name', e).append().html(insertUser);
-                        $('.product', e).append().html(products);
-                        $('.price', e).append().html(price);
-                        $('.status', e).append().html(status);
-
+                        $('.product', e).append().html(order['product']);
+                        $('.price', e).append().html(order['price']);
 
                 }
 
@@ -81,25 +99,29 @@ function displayOrders(){
             }
         }
     )
+
 }
 
-var editOrder = function editOrder(){
-
-    $('.delete').show();
-    $('#edit_btn').hide();
-}
-
-function deleteProductFromOrder(){
+var changeStatus = function changeStatus(div, status){
+    var id= $(div).parent().parent().attr('id');
+    alert(id);
     $.ajax(
         {
-            url: '/order/delete',
+            url: '/order/status',
             type: 'POST',
             async: false,
-            dataType: 'json',
+            data: {
+                id:id,
+                status:status
+            },
 
             success: function (data) {
-                alert(data);
 
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert(textStatus);
             }
-        })
+        }
+    )
 }

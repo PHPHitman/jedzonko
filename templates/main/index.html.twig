@@ -2,96 +2,135 @@
 
 
 {% block body %}
-<div class="body_container">
-    <div class="menu">
-        <ul>
+    <div class="body_container">
+<div class="row">
 
-            <li><a href={{ path('register') }}>Dodaj użytkownika</a></li>
-            <li><a href="{{ path('food.create') }}">Dodaj produkt</a></li>
+    <div class="col-12 col-lg-5">
+
+        <div class="sidebar">
+            <table class="table">
+
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Zamówienie</th>
+                    <th scope="col">Należność</th>
+                    <th scope="col">Działanie</th>
+                </tr>
+                </thead>
 
 
-        </ul>
+                <tbody id="table">
+
+
+                </tbody>
+                <tbody>
+                <tr>
+                    <td>W sumie</td>
+                    <td id="total_price"></td>
+                </tr>
+                </tbody>
+
+            </table>
+
+            <button class="btn btn-info" id="submit" >Złóż zamówienie</button>
+        </div>
+
+        <div class="orders">
+            <h2>Twoje dzisiejsze zamówienie</h2><hr/>
+            <table class="table" id="orders_table">
+
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Produkt</th>
+                    <th scope="col">Cena</th>
+
+
+                </tr>
+                </thead>
+
+
+                <tbody id="orders">
+
+
+                </tbody>
+
+            </table>
+
+            <div class="buttons">
+                <button class="btn btn-warning" id="edit_btn">Edytuj</button>
+                <button class="btn btn-danger float-right delete_all" id="delete_all" >Usuń</button>
+            </div>
+
+
+        </div>
+
     </div>
-    <div class="box">
+    <div class="col-12 col-lg-7">
 
 <div class="container">
     {{ block ('flashmessage', 'base.html.twig') }}
-
-    <div class="admin_list_orders">
-        <table class="table">
-
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Zamówienie</th>
-                <th scope="col">Należność</th>
-                <th scope="col">Działanie</th>
-            </tr>
-            </thead>
+    {% if is_granted('ROLE_ADMIN') %}
 
 
-            <tbody id="table">
+        <div class="users_order">
+            <h2>Dzisiejsze zamówienia:</h2><hr/>
 
+            <table class="table table-striped" id="admin_order_table">
 
-            </tbody>
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Użytkownik</th>
+                    <th scope="col">Produkty</th>
+                    <th scope="col">Cena</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Zmień</th>
 
-        </table>
+                </tr>
+                </thead>
 
-        <button class="btn btn-info" id="submit" >Złóż zamówienie</button>
-    </div>
+                <tbody id="user_orders">
 
-            <div class="sidebar">
-                <table class="table">
+                </tbody>
 
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Zamówienie</th>
-                        <th scope="col">Należność</th>
-                        <th scope="col">Działanie</th>
-                    </tr>
-                    </thead>
+            </table>
 
+            <div class="buttons">
 
-                    <tbody id="table">
-
-
-                    </tbody>
-
-                </table>
-
-                <button class="btn btn-info" id="submit" >Złóż zamówienie</button>
             </div>
+        </div>
 
-            <div class="orders">
-                <h2>Twoje dzisiejsze zamówienie</h2><hr/>
-                <table class="table">
-
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Produkt</th>
-                        <th scope="col">Cena</th>
-
-                    </tr>
-                    </thead>
+    {% endif %}
 
 
-                    <tbody id="orders">
 
 
-                    </tbody>
 
-                </table>
 
-                <div class="buttons">
-                    <button class="btn btn-warning" id="edit_btn">Edytuj</button>
-                    <button class="btn btn-danger float-right delete_all" id="delete_all" >Usuń</button>
+        <div class="searchbox">
+            <div class="row">
+            <div class="col-6">
+            <span id="value">Wyszukaj produkt</span>
+
+            <input id="searchbox"type="text" placeholder="wprowadź nazwę">
+            </div>
+            <div class="col-6">
+                <div id="searchedfood">
+{#                    <a href="" id="foodSearchHref">#}
+{#                      <img class="foodSearchImg">#}
+{#                    </a>#}
+
                 </div>
+                <div class="describe">
 
-
+                 </div>
             </div>
 
+</div>
+        </div>
 
-
+    <h2>Dania</h2>
             <div class="content">
+
 
 
                 <section class="food">
@@ -100,8 +139,7 @@
                         <div>
 
                             <img src="{{'/uploads/' ~ food.image}}" class="picture" data-product_id="{{ food.id }}">
-
-
+                            <span>{{ food.name }}</span>
 
                         </div>
                     {% endfor %}
@@ -112,6 +150,8 @@
 
             <h2>Desery</h2>
 
+
+
             <div class="content">
 
 
@@ -121,7 +161,7 @@
                         <div>
 
                             <img src="{{'/uploads/' ~ dessert.image}}" class="picture"  data-product_id="{{ dessert.id }}">
-
+                            <span>{{ dessert.name }}</span>
 
 
                         </div>
@@ -131,7 +171,7 @@
 
             </div>
 
-            <h2>Napoje</h2>
+    <h2>Napoje</h2>
             <div class="content">
 
 
@@ -141,48 +181,15 @@
                         <div>
 
                             <img src="{{'/uploads/' ~ drink.image}}" class="picture" data-product_id="{{ drink.id }}">
-
+                            <span>{{ drink.name }}</span>
 
                         </div>
                     {% endfor %}
 
                 </section>
-
             </div>
-
-
-    {% if is_granted('ROLE_ADMIN') %}
-
-
-        <div class="users_order">
-            <h2>Dzisiejsze zamówienia:</h2><hr/>
-
-                <table class="table">
-
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Użytkownik</th>
-                        <th scope="col">Produkty</th>
-                        <th scope="col">Cena</th>
-                        <th scope="col">Status</th>
-
-                    </tr>
-                    </thead>
-
-                    <tbody id="user_orders">
-
-                    </tbody>
-
-                </table>
-
-                <div class="buttons">
-
-                </div>
-        </div>
-
-    {% endif %}
-
-            </div>
+    </div>
+</div>
     </div>
 </div>
 

@@ -9,6 +9,9 @@ import './styles/app.css';
 import './js/slick.js';
 import './js/ajax.js';
 import './js/displayOrdersForAdmin.js';
+import './js/search.js';
+import './js/SwapDivs.js';
+import './js/editMadeOrders.js';
 
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
@@ -16,6 +19,7 @@ import './js/displayOrdersForAdmin.js';
 
 import $ from 'jquery';
 import 'slick-carousel';
+
 
 
 

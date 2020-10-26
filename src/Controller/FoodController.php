@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Food;
 use App\Entity\FoodOrders;
 use App\Form\FoodAddType;
+use App\Repository\FoodRepository;
 use App\Service\AddToOrder;
+use App\Service\DeleteSingleProduct;
 use App\Service\FoodDisplay;
 use App\Service\OrderDisplay;
 use App\Service\OrderPicker;
@@ -28,20 +30,22 @@ class FoodController extends AbstractController
      * @param OrderDisplay $orderDisplay
      * @return Response
      */
-    public function checkIfOrderExist(Request $request,OrderDisplay $orderDisplay){
+    public function checkIfOrderExist(Request $request, OrderDisplay $orderDisplay)
+    {
         if ($request->isXmlHttpRequest()) {
-            $status=$orderDisplay->checkIfOrderExist();
-            if($status){
-                $status=1;
-            }else{
-                $status=0;
+            $status = $orderDisplay->checkIfOrderExist();
+            if ($status) {
+                $status = 1;
+            } else {
+                $status = 0;
             }
-          return new Response( $status);
-        }else{
+            return new Response($status);
+        } else {
             return $this->render('main/index.html.twig');
         }
 
     }
+
     /**
      * @Route("/create", name="create")
      * @param Request $request
@@ -119,7 +123,8 @@ class FoodController extends AbstractController
 
                 $temp = array(
                     'name' => $food->getName(),
-                    'price' => $food->getPrice());
+                    'price' => $food->getPrice(),
+                'id'=>$food->getId());
 
                 $jsonData[$idx++] = $temp;
             }
@@ -136,16 +141,19 @@ class FoodController extends AbstractController
      * @Route("/save", name="save")
      * @param Request $request
      * @param OrderPicker $orderPicker
+     * @param DeleteSingleProduct $deleteSingleProduct
      * @return JsonResponse|Response
      */
 
-    public function saveOrder(Request $request, OrderPicker $orderPicker)
+    public function saveOrder(Request $request, OrderPicker $orderPicker, DeleteSingleProduct $deleteSingleProduct)
     {
 
         $array = json_decode($_POST['array']);
+        $delete = json_decode($_POST['deleteArray']);
 
         if ($request->isXmlHttpRequest()) {
 
+            $deleteSingleProduct->deleteSingle($delete);
             $orderPicker->insert($array);
 
             return new Response('Zamowienie złożone');
@@ -169,11 +177,61 @@ class FoodController extends AbstractController
 
         if ($request->isXmlHttpRequest()) {
 
-            $foodDetails=$orderDisplay->display();
-            Return new JsonResponse($foodDetails);
+            $foodDetails = $orderDisplay->display();
+            return new JsonResponse($foodDetails);
 
         } else {
             return $this->render('main/index.html.twig');
         }
+    }
+
+    /**
+     * @Route("/search", name="search")
+     * @param Request $request
+     * @param OrderDisplay $orderDisplay
+     * @return JsonResponse|Response
+     */
+
+    public function search(Request $request, FoodRepository $foodRepository)
+    {
+
+        if ($request->isXmlHttpRequest()) {
+
+            $search = $_POST['search'];
+
+//
+//            $foods=$this->getDoctrine()->getRepository(Food::class)
+//                ->findBy([
+//                    'name'=>$search
+//                ]);
+//            foreach
+//            $id = $foods->getId();
+//
+            $foods = $foodRepository->search($search);
+            $foodArray=array();
+                $counter=0;
+$index=0;
+            foreach ($foods as $food){
+                $temp=array(
+                    'id'=>$food->getId(),
+                    'image'=>$food->getImage(),
+                    'name'=>$food->getName(),
+                    'price'=>$food->getPrice()
+
+
+                );
+
+
+                $foodArray[$counter]=$temp;
+                $index++;
+            }
+
+            return new JsonResponse($foodArray);
+
+
+        } else {
+            return new Response('błąd');
+        }
+
     }
 }
