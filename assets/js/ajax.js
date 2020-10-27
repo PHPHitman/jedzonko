@@ -1,6 +1,6 @@
 import $ from "jquery";
 import {swap} from "./SwapDivs";
-
+var madeOrderStatus='';
 var productsArray= [];
 var madeOrderArray=[];
 var deleteFromMade= [];
@@ -14,6 +14,7 @@ var edit = $('.sidebar').hide();
 
 $(document).ready(function(){
 
+    
     checkIfOrderExist();
 
 //delete product from order list
@@ -33,23 +34,18 @@ $(document).ready(function(){
 
     $(document).on('click', '.delete_made', function(){
 
-
             var id = $(this).parent();
-
-
             var price=$(this).parent().parent().data('price');
              productsPrice-=price;
 
             putIdIntoDeleteProduct(id);
 
-
             var attr=id.attr('id');
             var row = document.getElementById(attr);
-
             $(row).remove();
 
             updatePrice();
-            console.table(deleteFromMade)
+
 
 
 
@@ -61,12 +57,11 @@ function updatePrice(){
     document.getElementById("total_price").innerHTML = productsPrice+' zł';
 }
 function displayElements($status){
+
     madeOrderArray=[];
     if ($status) {
-        $('.delete_all').on('click', clickHandler);
-        displayMadeOrders();
 
-        $(document).on('click', '#edit_btn', function() {
+        $(document).on('click','#edit_btn', function () {
 
             $('.sidebar').show();
             for (var i = 0; i < madeOrderArray.length; i++) {
@@ -75,25 +70,39 @@ function displayElements($status){
                 addMadeProductsIntoOrder(product);
 
             }
-            console.table(deleteFromMade);
-
-
             displayElements(false);
+
         });
+
+        $('.delete_all').on('click', function(event){
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            deleteAllFromOrder();
+        });
+
+
+        displayMadeOrders();
+
+
+
+
+        if(!(madeOrderStatus=='niedostarczone')) {
+            $('#edit_btn').hide();
+        }
     } else {
 
         $('.orders').hide();
 
 
-        $(document).on('click', '.picture', function(){
+        $(document).on('click', '.picture', function(event){
+            event.preventDefault();
+            event.stopImmediatePropagation();
             $('.sidebar').show();
+
             addProductIntoOrder($(this));
         });
 
-        $(".foodSearchImg").on("click", function (event) {
-            $('.sidebar').show();
-            addProductIntoOrder($(this));
-        });
 
         $(document).on('click', '.foodSearchImg', function(){
             $('.sidebar').show();
@@ -103,13 +112,11 @@ function displayElements($status){
         $("#submit").off().on("click", function (event) {
             $('.sidebar').remove("slow");
             sendIdArray();
+            productsPrice=0;
         });
 
-        // $(document).on('click', '.edit_btn', function(){
-        //     $('.delete_product').show();
-        //     $(this).child().show();
-        //     $(this).hide();
-        // });
+
+
     }
 }
 
@@ -137,7 +144,7 @@ function checkIfOrderExist(){
 //add product into order
 export function addProductIntoOrder($product){
 
-    var id = $product.data('product_id');
+    var id = $product.attr('id');
 
     //check if product is already on list
     if (!(checkIfProductsInArray(id))) {
@@ -157,6 +164,7 @@ export function addProductIntoOrder($product){
                 },
                 //fetch sended data sended in controller request
                 success: function (data, status) {
+
                     for (var i = 0; i < data.length; i++) {
                         var food = data[i];
                         var price = food['price'];
@@ -195,6 +203,7 @@ export function addProductIntoOrder($product){
                 },
             },
         )
+    return false;
 
 }
 
@@ -252,10 +261,9 @@ function sendIdArray() {
             alert(textStatus);
         }
     })
-    $('#table').children().remove();
+
 productsArray=[];
 madeOrderArray=[];
-
 
 checkIfOrderExist();
 }
@@ -279,6 +287,9 @@ function displayMadeOrders() {
             for (var i = 0; i < data.length; i++) {
                var food = data[i];
                var id=food.id;
+               var orderStatus = food.status;
+
+
 
                 if(i===data.length-1){
                     var e=$('<tr class="table-info">' +
@@ -294,7 +305,10 @@ function displayMadeOrders() {
                     $('#orders').append(e);
                     $('#total_price', e).append().html(food['total_price']+'zł');
 
-                    $('#status', e).append().html(food['status']);
+                    $('#status', e).append().html(orderStatus);
+                    madeOrderStatus=orderStatus;
+
+
                 }
 
                 else {
@@ -316,7 +330,7 @@ function displayMadeOrders() {
                     putIdIntoMadeOrderArray(id);
                 }
             }
-            console.table(madeOrderArray);
+
         },
 
         error : function (xhr, textStatus, errorThrown) {
@@ -325,7 +339,7 @@ function displayMadeOrders() {
     })
     $('.sidebar').hide();
     $('.orders').show("slow");
-    document.getElementById("delete_all").addEventListener("click", clickHandler);
+    // document.getElementById("delete_all").addEventListener("click", clickHandler);
 
 }
 
@@ -335,7 +349,7 @@ function setStatus($isExist){
 }
 
 //delete all from Order
-var clickHandler= function deleteAllFromOrder(){
+function deleteAllFromOrder(){
     $.ajax({
         url: '/order/delete/all',
         type: 'POST',
@@ -350,7 +364,7 @@ var clickHandler= function deleteAllFromOrder(){
         }
     })
     madeOrderArray=[];
-    alert(madeOrderArray);
+
 
 
     $('.orders').hide();
@@ -384,6 +398,7 @@ function checkIfProductsInArray(idElement) {
 function addMadeProductsIntoOrder(product){
     var id = product;
 
+
         $.ajax({
                 url: '/food/add',
                 type: 'POST',
@@ -396,6 +411,7 @@ function addMadeProductsIntoOrder(product){
                 },
                 //fetch sended data sended in controller request
                 success: function (data, status) {
+
                     for (var i = 0; i < data.length; i++) {
                         var food = data[i];
                         var productId=food.id;

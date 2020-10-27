@@ -1,10 +1,10 @@
 import $ from "jquery";
 
+
 $(document).ready(function(){
 
+
 displayOrders();
-
-
 
 
 });
@@ -59,9 +59,19 @@ function displayOrders(){
                         '<td>'+
                         '<td><span class="status"></span></td>' +
                         '<td>'+
-                                '<button class="status_pending" id="pending" >W trakcie</button>'+
-                                '<button  class="status_delivered" id="delivered" >Dostarczone</button>'+
-                    '</td>'+
+                        '<div class="dropdown">'+
+                            '<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
+                                'Status </button>'+
+                            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">'+
+                                '<a class="dropdown-item status_pending"id="pending" >W trakcie</a>'+
+                                '<a class="dropdown-item status_delivered" id="delivered" href="#">Dostarczone</a>'+
+                            '</div>'+
+                        '</div>'+
+                        '</td>'+
+                    //     '<td>'+
+                    //             '<button class="status_pending" id="pending" >W trakcie</button>'+
+                    //             '<button  class="status_delivered" id="delivered" >Dostarczone</button>'+
+                    // '</td>'+
                         '</tr>');
 
 
@@ -71,8 +81,8 @@ function displayOrders(){
 
                     $('.user', e).append().html(user);
                     $('.status', e).append().html(order['status']);
-                    $('#delivered').attr('id', id);
-                    $('#pending').attr('id',id);
+                    $('#delivered').attr('id', order.user);
+                    $('#pending').attr('id',order.user);
                     $("#info").attr('id', order.user);
 
                     user = order['user'];
@@ -103,7 +113,7 @@ function displayOrders(){
 }
 
 var changeStatus = function changeStatus(div, status){
-    var id= $(div).parent().parent().attr('id');
+    var id= $(div).attr('id');
     alert(id);
     $.ajax(
         {
@@ -116,7 +126,7 @@ var changeStatus = function changeStatus(div, status){
             },
 
             success: function (data) {
-
+            status=true;
 
             },
             error: function (xhr, textStatus, errorThrown) {

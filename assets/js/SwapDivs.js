@@ -1,20 +1,20 @@
 import $ from "jquery";
 
+$('.searchbox').hide();
+var orders =$('.users_order').hide();
 
-// var orders =$('.users_order').hide();
-var food =$('.food_container').show();
 
-// orders.hide();
+
 
 
 $(document).ready(function(){
 
-    $('#orders_nav').click(function(){
-      orders.show();
+    $('#orders_nav').on('click', function(){
+        $('.food_container, .users_order').toggle("slow");
         // swap(orders,active);
     })
     $('#search').click(function(){
-        $('container').toggle('orders food');
+        $('.searchbox').toggle("slow");
 
     })
 

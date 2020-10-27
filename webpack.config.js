@@ -35,6 +35,7 @@ Encore
     .addEntry('search', './assets/js/search.js')
     .addEntry('swap', './assets/js/SwapDivs.js')
     .addEntry('edit', './assets/js/editMadeOrders.js')
+    .addEntry('category', './assets/js/selectCategory.js')
 
 
     //.addEntry('page1', './assets/page1.js')

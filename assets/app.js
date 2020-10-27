@@ -12,6 +12,7 @@ import './js/displayOrdersForAdmin.js';
 import './js/search.js';
 import './js/SwapDivs.js';
 import './js/editMadeOrders.js';
+import './js/selectCategory.js';
 
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.

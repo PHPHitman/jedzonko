@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Food;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use http\Env\Request;
 use PhpParser\Node\Stmt\Return_;
 
 /**
@@ -21,7 +22,7 @@ class FoodRepository extends ServiceEntityRepository
 
 
     }
-public function search($search){
+    public function search($search){
 
     $queryBuilder = $this->createQueryBuilder('c')
         ->where('c.name LIKE :name')
@@ -29,18 +30,22 @@ public function search($search){
     ->getQuery()
         ->getResult();
 
-$queryArray=array();
-$counter=0;
-$food=json_encode($queryBuilder);
-foreach($queryBuilder as $query) {
 
-    $array = array(
-        'id' => $query
-    );
+        foreach($queryBuilder as $query) {
+
+            $array = array(
+                'id' => $query
+            );
+
+        }
+                Return $array;
+        }
+
+
+
+public function findProducts(Request $request){
+
 
 }
-        Return $array;
 }
 
-
-}

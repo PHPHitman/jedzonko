@@ -11,6 +11,7 @@ use App\Service\DeleteSingleProduct;
 use App\Service\FoodDisplay;
 use App\Service\OrderDisplay;
 use App\Service\OrderPicker;
+use PhpParser\Node\Stmt\Return_;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -188,7 +189,7 @@ class FoodController extends AbstractController
     /**
      * @Route("/search", name="search")
      * @param Request $request
-     * @param OrderDisplay $orderDisplay
+     * @param FoodRepository $foodRepository
      * @return JsonResponse|Response
      */
 
@@ -199,26 +200,17 @@ class FoodController extends AbstractController
 
             $search = $_POST['search'];
 
-//
-//            $foods=$this->getDoctrine()->getRepository(Food::class)
-//                ->findBy([
-//                    'name'=>$search
-//                ]);
-//            foreach
-//            $id = $foods->getId();
-//
             $foods = $foodRepository->search($search);
+
             $foodArray=array();
                 $counter=0;
-$index=0;
+            $index=0;
             foreach ($foods as $food){
                 $temp=array(
                     'id'=>$food->getId(),
                     'image'=>$food->getImage(),
                     'name'=>$food->getName(),
                     'price'=>$food->getPrice()
-
-
                 );
 
 
@@ -233,5 +225,36 @@ $index=0;
             return new Response('błąd');
         }
 
+    }
+
+    /**
+     * @Route("/category", name="category")
+     * @param Request $request
+     * @param FoodRepository $foodRepository
+     * @return JsonResponse|Response
+     */
+    public function select(Request $request, FoodRepository $foodRepository){
+        if($request->isXmlHttpRequest()){
+
+
+            $company=$_POST['company'];
+            $em = $this->getDoctrine()->getManager();
+
+            $RAW_QUERY = 'SELECT f.* ,ct.name AS catName  FROM Food AS f LEFT JOIN Company c ON f.company_id=c.id LEFT JOIN category ct ON f.category_id=ct.id WHERE c.name=:company ';
+
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->bindParam(':company',$company);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if($result) {
+                return new JsonResponse($result);
+            }
+            return new JsonResponse('Nie znaleziono produktów');
+
+        }else{
+
+            Return new JsonResponse('Wystąpił błąd');
+
+        }
     }
 }

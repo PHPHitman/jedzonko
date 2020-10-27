@@ -105,6 +105,23 @@
 
 
 
+<div class="category">
+    <div class="row">
+        <div class="col col-xl-4">
+            <button class=" btn btn-info category_card" id="Rzeszowskie kulinaria">Rzeszowskie kulinaria</button>
+        </div>
+        <div class="col col-xl-4">
+            <button class=" btn btn-info category_card" id="Burger point>Burger Point">Burger point</button>
+        </div>
+        <div class="col col-xl-4">
+            <button class=" btn btn-info category_card" id="Volcano">Volcano</button>
+        </div>
+        <div class="col col-xl-4">
+            <button class=" btn btn-info category_card" id="Dersim">Dersim</button>
+        </div>
+
+    </div>
+</div>
 
         <div class="searchbox">
             <div class="row">
@@ -121,47 +138,52 @@
 
                 </div>
                 <div class="describe">
-
-                 </div>
+                    <span class="name"></span><br/>
+                    <span class="price"></span>
+                </div>
             </div>
 
 </div>
         </div>
+<div class="food_container">
 
-    <h2>Dania</h2>
-            <div class="content">
+            <div class="content" id="dania">
+                <h2>Dania</h2>
 
 
+                <section class="food" id="dania">
 
-                <section class="food">
+{#                    {% for food in foods %}#}
+{#                        <div class="product" id="{{ food.company }}">#}
+{#                        <div>#}
 
-                    {% for food in foods %}
-                        <div>
+{#                                <div class="img">#}
+{#                                <img src="{{'/uploads/' ~ food.image}}" class="picture" data-product_id="{{ food.id }}" id="Rzeszowskiekulinaria">#}
+{#                                <span>{{ food.name}}</span><br/><span> {{  food.price ~' zł'}}</span>#}
+{#                                </div>#}
+{#                            </div>#}
 
-                            <img src="{{'/uploads/' ~ food.image}}" class="picture" data-product_id="{{ food.id }}">
-                            <span>{{ food.name }}</span>
-
-                        </div>
-                    {% endfor %}
+{#                        </div>#}
+{#                    {% endfor %}#}
 
                 </section>
 
             </div>
 
-            <h2>Desery</h2>
 
 
 
-            <div class="content">
 
+            <div class="content" id="desery">
+                <h2>Desery</h2>
 
                 <section class="food">
 
                     {% for dessert in desserts %}
-                        <div>
+                        <div id="dessert">
 
-                            <img src="{{'/uploads/' ~ dessert.image}}" class="picture"  data-product_id="{{ dessert.id }}">
-                            <span>{{ dessert.name }}</span>
+{#                            <img src="{{'/uploads/' ~ dessert.image}}" class="picture"  data-product_id="{{ dessert.id }}">#}
+{#                            <span>{{ dessert.name }}</span>#}
 
 
                         </div>
@@ -171,9 +193,9 @@
 
             </div>
 
-    <h2>Napoje</h2>
-            <div class="content">
 
+            <div class="content" id="napoje">
+                <h2>Napoje</h2>
 
                 <section class="food">
 
@@ -192,6 +214,7 @@
 </div>
     </div>
 </div>
+    </div>
 
     {% block javascripts %}
     {{ encore_entry_script_tags('app') }}

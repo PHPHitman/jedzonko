@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 $('#plus').hide();
-$(document).ready( function () {
+export function slick () {
     $('.food').slick({
         dots: true,
         infinite: true,
@@ -38,4 +38,4 @@ $(document).ready( function () {
         ]
     });
 
-});
+};

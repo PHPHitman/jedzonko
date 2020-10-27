@@ -107,7 +107,7 @@ menu.ul.li a{
     color:white;
 }
 
-input[type=text] {
+#searchbox[type=text] {
 
     background-color: aquamarine;
     padding: 6px;
@@ -122,6 +122,7 @@ input[type=text] {
     margin-bottom:20px;
     border-radius: 5px;
     border:solid 1px;
+    min-width: 400px;
 }
 
 #admin_order_table{
@@ -147,4 +148,15 @@ width: 100%;
 .dropdown .btn{
 padding:5px !important;
 margin:0 !important;
+}
+.col{
+    padding:0px !important;
+    margin:0px !important;
+}
+.describe{
+    text-align:  center;
+
+}
+#searchedfood{
+    text-align: center;
 }

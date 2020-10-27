@@ -44,9 +44,17 @@ class Food
      */
     private $orders;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="foods")
+     */
+    private $company;
+
+
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+
     }
 
 
@@ -135,6 +143,19 @@ class Food
         return $this;
     }
 
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    
 
 
 

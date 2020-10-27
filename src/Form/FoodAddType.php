@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Category;
+use App\Entity\Company;
 use App\Entity\Food;
 
 
@@ -31,6 +32,10 @@ class FoodAddType extends AbstractType
             ])
             ->add('category', EntityType::class,[
                 'class' => Category::class
+            ])
+            ->add('company', EntityType::class,[
+                'class' => Company::class,
+                'label' =>'Firma'
             ])
             ->add('submit', SubmitType::class,[
                 'attr' =>[

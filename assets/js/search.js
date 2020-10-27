@@ -40,20 +40,21 @@ function searchFood(text){
                             var image = food.image;
                             var id = food.id;
                             var name = food.name;
+                            var price= food.price;
 
-                            findSearched(image, id, name);
+                            findSearched(image, id, name, price);
                         }
                     }
                 },
                 error : function (xhr, textStatus, errorThrown) {
 
-                    findSearched(false, false, false);
+                    findSearched(false, false, false, false);
                 }
             }
         )
 }
 
-function findSearched(image, id, name) {
+function findSearched(image, id, name, price) {
 
     searchedId = image;
     var url='/uploads/'+searchedId;
@@ -65,13 +66,19 @@ function findSearched(image, id, name) {
 
     } else {
 
-        var e=$('<img class="foodSearchImg">');
+        var e=$('<img class="foodSearchImg">'
+
+        );
 
         $('#searchedfood').children().remove();
         $('#searchedfood').append(e);
-        e.data('product_id', id);
-        e.attr('src', url );
-        $('.describe').html(''+name);
+        e.data('id', id);
+        e.attr({
+            src: url,
+            id:id,
+        });
+        $('.name').html(''+name);
+        $('.price').html(''+price+' zł');
 
     }
 }
