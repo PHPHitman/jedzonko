@@ -14,7 +14,10 @@ var edit = $('.sidebar').hide();
 
 $(document).ready(function(){
 
-    
+
+
+
+
     checkIfOrderExist();
 
 //delete product from order list
@@ -261,7 +264,7 @@ function sendIdArray() {
             alert(textStatus);
         }
     })
-
+    
 productsArray=[];
 madeOrderArray=[];
 
@@ -411,7 +414,7 @@ function addMadeProductsIntoOrder(product){
                 },
                 //fetch sended data sended in controller request
                 success: function (data, status) {
-
+     
                     for (var i = 0; i < data.length; i++) {
                         var food = data[i];
                         var productId=food.id;

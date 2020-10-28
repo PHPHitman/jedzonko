@@ -1,18 +1,25 @@
 import $ from "jquery";
 import {slick} from "./slick";
 
+var currentCompany=null;
 $(document).ready(function (){
 
-    $('.category_card').one('click', function () {
-        var id = $(this).attr('id');
-        selectProductsWithCategory(id);
-        alert('klik');
+    $('.category_card').on('click', function () {
+
+        var companyId = $(this).attr('id');
+            if(currentCompany!==companyId) {
+
+                selectProductsByCompany(companyId);
+                currentCompany = companyId;
+            }
 
     })
 
 });
 
-function selectProductsWithCategory(company){
+function selectProductsByCompany(company){
+
+
     $.ajax({
             url:        'food/category',
             type:       'POST',
@@ -25,9 +32,15 @@ function selectProductsWithCategory(company){
             success: function (data) {
 
 
+$(".food").remove();
+
+
             //     var e=$('<section class="food"></section>');
             // $('.content').append(e)
+        var foodCategory='';
                 for(var i=0; i<data.length; i++){
+
+
                     var product = data[i];
                     var id=product.id;
                     var name=product.name;
@@ -35,18 +48,23 @@ function selectProductsWithCategory(company){
                     var category =product.catName;
                     var image = product.image;
 
-                    var e=$('<div class="product">'+
-                                '<div>'+
-                                    '<div class="img">'+
-                                        '<img class="picture" id="card">'+
-                                         '<span id="name"></span><br/>'+
-                                         '<span id="price"></span>'+
-                                    '</div>'+
 
-                                '</div>'+
-                            '</div>')
+                        var e = $(
+                            // '<section class="food">'+
+                        //     '<div>'+
+                        //         '<div>'+
+                                     '<img id="card">'+
+                                      // '<span id="name"></span><br/>'+
+                                      //  '<span id="price"></span>'
+                            //     '</div>'+
+                            // '</div>'+
+                            // '</section>'
 
-                    $('.content').find('#'+category).append(e);
+                        )
+
+                        $('#picture').append(e);
+                        e.attr('id',category);
+
                     $('#card').attr({
                         src:'/uploads/'+image,
                         class:'picture',
@@ -56,13 +74,16 @@ function selectProductsWithCategory(company){
                         product_id:id,
                                 });
 
-                    $('#card').parent().data('price',price)
+                    // $('#card').parent().data('price',price)
 
                         $('#name',e).append().html(name);
                         $('#price',e).append().html(price+' zł');
 
+                    // $('.slider').slick('slickRemove', $('.slick-slide').index(this) - 1);
+                    slick();
 
                 }
+                // document.getElementById('content').style.width = '0px';
                 slick();
 
             },
@@ -71,4 +92,13 @@ function selectProductsWithCategory(company){
             }
         }
     )
+}
+
+function removeNodes(){
+    const parent = document.getElementById("dania")
+    while (parent.firstChild) {
+        parent.firstChild.remove();
+    }
+    $('#dania').load(document.URL +  ' #dania');
+    return true;
 }

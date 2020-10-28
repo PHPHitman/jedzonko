@@ -160,3 +160,10 @@ margin:0 !important;
 #searchedfood{
     text-align: center;
 }
+.food{
+    width:100%;
+    display: inline-block;
+}
+.food img{
+    display: inline-block;
+}
