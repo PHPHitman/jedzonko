@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FoodController extends AbstractController
     /**
-     * @Route("/food", name="food.")
+     * @Route("/{_locale}/food", name="food.")
      */
 {
     /**
@@ -238,6 +238,10 @@ class FoodController extends AbstractController
 
 
             $company=$_POST['company'];
+
+//            $products=$foodRepository->selectProducts($company);
+//
+
             $em = $this->getDoctrine()->getManager();
 
             $RAW_QUERY = 'SELECT f.* ,ct.name AS catName  FROM Food AS f LEFT JOIN Company c ON f.company_id=c.id LEFT JOIN category ct ON f.category_id=ct.id WHERE c.name=:company ';
@@ -249,7 +253,7 @@ class FoodController extends AbstractController
             if($result) {
                 return new JsonResponse($result);
             }
-            return new JsonResponse('Nie znaleziono produktów');
+            return new JsonResponse(false);
 
         }else{
 

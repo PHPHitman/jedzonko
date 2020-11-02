@@ -1,0 +1,329 @@
+Index: templates/main/index.html.twig
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends 'base.html.twig' %}\r\n\r\n\r\n{% block body %}\r\n    <div class=\"body_container\">\r\n<div class=\"row\">\r\n\r\n    <div class=\"col-12 col-lg-5\">\r\n\r\n        <div class=\"sidebar\">\r\n            <table class=\"table\">\r\n\r\n                <thead class=\"thead-dark\">\r\n                <tr>\r\n                    <th scope=\"col\">Zamówienie</th>\r\n                    <th scope=\"col\">Należność</th>\r\n                    <th scope=\"col\">Działanie</th>\r\n                </tr>\r\n                </thead>\r\n\r\n\r\n                <tbody id=\"table\">\r\n\r\n\r\n                </tbody>\r\n                <tbody>\r\n                <tr>\r\n                    <td>W sumie</td>\r\n                    <td id=\"total_price\"></td>\r\n                </tr>\r\n                </tbody>\r\n\r\n            </table>\r\n\r\n            <button class=\"btn btn-info\" id=\"submit\" >Złóż zamówienie</button>\r\n        </div>\r\n\r\n        <div class=\"orders\">\r\n            <h2>Twoje dzisiejsze zamówienie</h2><hr/>\r\n            <table class=\"table\" id=\"orders_table\">\r\n\r\n                <thead class=\"thead-dark\">\r\n                <tr>\r\n                    <th scope=\"col\">Produkt</th>\r\n                    <th scope=\"col\">Cena</th>\r\n\r\n\r\n                </tr>\r\n                </thead>\r\n\r\n\r\n                <tbody id=\"orders\">\r\n\r\n\r\n                </tbody>\r\n\r\n            </table>\r\n\r\n            <div class=\"buttons\">\r\n                <button class=\"btn btn-warning\" id=\"edit_btn\">Edytuj</button>\r\n                <button class=\"btn btn-danger float-right delete_all\" id=\"delete_all\" >Usuń</button>\r\n            </div>\r\n\r\n\r\n        </div>\r\n\r\n    </div>\r\n    <div class=\"col-12 col-lg-7\">\r\n\r\n<div class=\"container\">\r\n    {{ block ('flashmessage', 'base.html.twig') }}\r\n    {% if is_granted('ROLE_ADMIN') %}\r\n\r\n\r\n        <div class=\"users_order\">\r\n            <h2>Dzisiejsze zamówienia:</h2><hr/>\r\n\r\n            <table class=\"table table-striped\" id=\"admin_order_table\">\r\n\r\n                <thead class=\"thead-dark\">\r\n                <tr>\r\n                    <th scope=\"col\">Użytkownik</th>\r\n                    <th scope=\"col\">Produkty</th>\r\n                    <th scope=\"col\">Cena</th>\r\n                    <th scope=\"col\">Status</th>\r\n                    <th scope=\"col\">Zmień</th>\r\n\r\n                </tr>\r\n                </thead>\r\n\r\n                <tbody id=\"user_orders\">\r\n\r\n                </tbody>\r\n\r\n            </table>\r\n\r\n            <div class=\"buttons\">\r\n\r\n            </div>\r\n        </div>\r\n\r\n    {% endif %}\r\n\r\n\r\n\r\n\r\n\r\n<div class=\"category\">\r\n    <div class=\"row\">\r\n        <div class=\"col col-xl-4\">\r\n            <button class=\" btn btn-info category_card\" id=\"Rzeszowskie kulinaria\">Rzeszowskie kulinaria</button>\r\n        </div>\r\n        <div class=\"col col-xl-4\">\r\n            <button class=\" btn btn-info category_card\" id=\"Burger point>Burger Point\">Burger point</button>\r\n        </div>\r\n        <div class=\"col col-xl-4\">\r\n            <button class=\" btn btn-info category_card\" id=\"Volcano\">Volcano</button>\r\n        </div>\r\n        <div class=\"col col-xl-4\">\r\n            <button class=\" btn btn-info category_card\" id=\"Dersim\">Dersim</button>\r\n        </div>\r\n\r\n    </div>\r\n</div>\r\n\r\n        <div class=\"searchbox\">\r\n            <div class=\"row\">\r\n            <div class=\"col-6\">\r\n            <span id=\"value\">Wyszukaj produkt</span>\r\n\r\n            <input id=\"searchbox\"type=\"text\" placeholder=\"wprowadź nazwę\">\r\n            </div>\r\n            <div class=\"col-6\">\r\n                <div id=\"searchedfood\">\r\n{#                    <a href=\"\" id=\"foodSearchHref\">#}\r\n{#                      <img class=\"foodSearchImg\">#}\r\n{#                    </a>#}\r\n\r\n                </div>\r\n                <div class=\"describe\">\r\n                    <span class=\"name\"></span><br/>\r\n                    <span class=\"price\"></span>\r\n                </div>\r\n            </div>\r\n\r\n</div>\r\n        </div>\r\n<div class=\"food_container\">\r\n\r\n            <div class=\"content\" id=\"dania\">\r\n                <h2>Dania</h2>\r\n\r\n\r\n                <section class=\"food\" id=\"dania\">\r\n\r\n{#                    {% for food in foods %}#}\r\n{#                        <div class=\"product\" id=\"{{ food.company }}\">#}\r\n{#                        <div>#}\r\n\r\n{#                                <div class=\"img\">#}\r\n{#                                <img src=\"{{'/uploads/' ~ food.image}}\" class=\"picture\" data-product_id=\"{{ food.id }}\" id=\"Rzeszowskiekulinaria\">#}\r\n{#                                <span>{{ food.name}}</span><br/><span> {{  food.price ~' zł'}}</span>#}\r\n{#                                </div>#}\r\n{#                            </div>#}\r\n\r\n{#                        </div>#}\r\n{#                    {% endfor %}#}\r\n\r\n                </section>\r\n\r\n            </div>\r\n\r\n\r\n\r\n\r\n\r\n            <div class=\"content\" id=\"desery\">\r\n                <h2>Desery</h2>\r\n\r\n                <section class=\"food\">\r\n\r\n                    {% for dessert in desserts %}\r\n                        <div id=\"dessert\">\r\n\r\n{#                            <img src=\"{{'/uploads/' ~ dessert.image}}\" class=\"picture\"  data-product_id=\"{{ dessert.id }}\">#}\r\n{#                            <span>{{ dessert.name }}</span>#}\r\n\r\n\r\n                        </div>\r\n                    {% endfor %}\r\n\r\n                </section>\r\n\r\n            </div>\r\n\r\n\r\n            <div class=\"content\" id=\"napoje\">\r\n                <h2>Napoje</h2>\r\n\r\n                <section class=\"food\">\r\n\r\n                    {% for drink in drinks %}\r\n                        <div>\r\n\r\n                            <img src=\"{{'/uploads/' ~ drink.image}}\" class=\"picture\" data-product_id=\"{{ drink.id }}\">\r\n                            <span>{{ drink.name }}</span>\r\n\r\n                        </div>\r\n                    {% endfor %}\r\n\r\n                </section>\r\n            </div>\r\n    </div>\r\n</div>\r\n    </div>\r\n</div>\r\n    </div>\r\n\r\n    {% block javascripts %}\r\n    {{ encore_entry_script_tags('app') }}\r\n    {% endblock %}\r\n\r\n{% endblock %}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- templates/main/index.html.twig	(revision d6597e50b646f27f8e11ff4f7c659ee564c3dde1)
++++ templates/main/index.html.twig	(date 1603871985609)
+@@ -2,218 +2,151 @@
+ 
+ 
+ {% block body %}
++
++
+     <div class="body_container">
+-<div class="row">
++    <div class="row">
+ 
+-    <div class="col-12 col-lg-5">
++        <div class="col-12 col-lg-5">
+ 
+-        <div class="sidebar">
+-            <table class="table">
++            <div class="sidebar">
++                <table class="table">
+ 
+-                <thead class="thead-dark">
+-                <tr>
+-                    <th scope="col">Zamówienie</th>
+-                    <th scope="col">Należność</th>
+-                    <th scope="col">Działanie</th>
+-                </tr>
+-                </thead>
++                    <thead class="thead-dark">
++                    <tr>
++                        <th scope="col">Zamówienie</th>
++                        <th scope="col">Należność</th>
++                        <th scope="col">Działanie</th>
++                    </tr>
++                    </thead>
+ 
+ 
+-                <tbody id="table">
++                    <tbody id="table">
+ 
+ 
+-                </tbody>
+-                <tbody>
+-                <tr>
+-                    <td>W sumie</td>
+-                    <td id="total_price"></td>
+-                </tr>
+-                </tbody>
++                    </tbody>
++                    <tbody>
++                    <tr>
++                        <td>W sumie</td>
++                        <td id="total_price"></td>
++                    </tr>
++                    </tbody>
+ 
+-            </table>
++                </table>
+ 
+-            <button class="btn btn-info" id="submit" >Złóż zamówienie</button>
+-        </div>
++                <button class="btn btn-info" id="submit" >Złóż zamówienie</button>
++            </div>
+ 
+-        <div class="orders">
+-            <h2>Twoje dzisiejsze zamówienie</h2><hr/>
+-            <table class="table" id="orders_table">
++            <div class="orders">
++                <h2>Twoje dzisiejsze zamówienie</h2><hr/>
++                <table class="table" id="orders_table">
+ 
+-                <thead class="thead-dark">
+-                <tr>
+-                    <th scope="col">Produkt</th>
+-                    <th scope="col">Cena</th>
++                    <thead class="thead-dark">
++                    <tr>
++                        <th scope="col">Produkt</th>
++                        <th scope="col">Cena</th>
+ 
+ 
+-                </tr>
+-                </thead>
++                    </tr>
++                    </thead>
+ 
+ 
+-                <tbody id="orders">
++                    <tbody id="orders">
+ 
+ 
+-                </tbody>
++                    </tbody>
+ 
+-            </table>
++                </table>
+ 
+-            <div class="buttons">
+-                <button class="btn btn-warning" id="edit_btn">Edytuj</button>
+-                <button class="btn btn-danger float-right delete_all" id="delete_all" >Usuń</button>
+-            </div>
++                <div class="buttons">
++                    <button class="btn btn-warning" id="edit_btn">Edytuj</button>
++                    <button class="btn btn-danger float-right delete_all" id="delete_all" >Usuń</button>
++                </div>
+ 
+ 
+-        </div>
++            </div>
+ 
+-    </div>
+-    <div class="col-12 col-lg-7">
++        </div>
++        <div class="col-12 col-lg-7">
+ 
+-<div class="container">
+-    {{ block ('flashmessage', 'base.html.twig') }}
+-    {% if is_granted('ROLE_ADMIN') %}
++    <div class="container">
++        {{ block ('flashmessage', 'base.html.twig') }}
++        {% if is_granted('ROLE_ADMIN') %}
+ 
+ 
+-        <div class="users_order">
+-            <h2>Dzisiejsze zamówienia:</h2><hr/>
++            <div class="users_order">
++                <h2>Dzisiejsze zamówienia:</h2><hr/>
+ 
+-            <table class="table table-striped" id="admin_order_table">
++                <table class="table table-striped" id="admin_order_table">
+ 
+-                <thead class="thead-dark">
+-                <tr>
+-                    <th scope="col">Użytkownik</th>
+-                    <th scope="col">Produkty</th>
+-                    <th scope="col">Cena</th>
+-                    <th scope="col">Status</th>
+-                    <th scope="col">Zmień</th>
++                    <thead class="thead-dark">
++                    <tr>
++                        <th scope="col">Użytkownik</th>
++                        <th scope="col">Produkty</th>
++                        <th scope="col">Cena</th>
++                        <th scope="col">Status</th>
++                        <th scope="col">Zmień</th>
+ 
+-                </tr>
+-                </thead>
++                    </tr>
++                    </thead>
+ 
+-                <tbody id="user_orders">
++                    <tbody id="user_orders">
+ 
+-                </tbody>
++                    </tbody>
+ 
+-            </table>
++                </table>
+ 
+-            <div class="buttons">
++                <div class="buttons">
+ 
+-            </div>
+-        </div>
++                </div>
++            </div>
+ 
+-    {% endif %}
++        {% endif %}
+ 
+ 
+ 
+ 
+ 
+-<div class="category">
+-    <div class="row">
+-        <div class="col col-xl-4">
+-            <button class=" btn btn-info category_card" id="Rzeszowskie kulinaria">Rzeszowskie kulinaria</button>
+-        </div>
+-        <div class="col col-xl-4">
+-            <button class=" btn btn-info category_card" id="Burger point>Burger Point">Burger point</button>
+-        </div>
+-        <div class="col col-xl-4">
+-            <button class=" btn btn-info category_card" id="Volcano">Volcano</button>
+-        </div>
+-        <div class="col col-xl-4">
+-            <button class=" btn btn-info category_card" id="Dersim">Dersim</button>
+-        </div>
++    <div class="category">
++        <div class="row">
++            <div class="col col-xl-4">
++                <button class=" btn btn-info category_card" id="Rzeszowskie kulinaria">Rzeszowskie kulinaria</button>
++            </div>
++            <div class="col col-xl-4">
++                <button class=" btn btn-info category_card" id="Burger point>Burger Point">Burger point</button>
++            </div>
++            <div class="col col-xl-4">
++                <button class=" btn btn-info category_card" id="Volcano">Volcano</button>
++            </div>
++            <div class="col col-xl-4">
++                <button class=" btn btn-info category_card" id="Dersim">Dersim</button>
++            </div>
+ 
+-    </div>
+-</div>
++        </div>
++    </div>
+ 
+-        <div class="searchbox">
+-            <div class="row">
+-            <div class="col-6">
+-            <span id="value">Wyszukaj produkt</span>
++            <div class="searchbox">
++                <div class="row">
++                <div class="col-6">
++                <span id="value">Wyszukaj produkt</span>
+ 
+-            <input id="searchbox"type="text" placeholder="wprowadź nazwę">
+-            </div>
+-            <div class="col-6">
+-                <div id="searchedfood">
+-{#                    <a href="" id="foodSearchHref">#}
+-{#                      <img class="foodSearchImg">#}
+-{#                    </a>#}
++                <input id="searchbox"type="text" placeholder="wprowadź nazwę">
++                </div>
++                <div class="col-6">
++                    <div id="searchedfood">
++
+ 
+-                </div>
+-                <div class="describe">
+-                    <span class="name"></span><br/>
+-                    <span class="price"></span>
+-                </div>
+-            </div>
+-
+-</div>
+-        </div>
+-<div class="food_container">
+-
+-            <div class="content" id="dania">
+-                <h2>Dania</h2>
+-
+-
+-                <section class="food" id="dania">
+-
+-{#                    {% for food in foods %}#}
+-{#                        <div class="product" id="{{ food.company }}">#}
+-{#                        <div>#}
+-
+-{#                                <div class="img">#}
+-{#                                <img src="{{'/uploads/' ~ food.image}}" class="picture" data-product_id="{{ food.id }}" id="Rzeszowskiekulinaria">#}
+-{#                                <span>{{ food.name}}</span><br/><span> {{  food.price ~' zł'}}</span>#}
+-{#                                </div>#}
+-{#                            </div>#}
+-
+-{#                        </div>#}
+-{#                    {% endfor %}#}
+-
+-                </section>
+-
+-            </div>
+-
+-
+-
+-
+-
+-            <div class="content" id="desery">
+-                <h2>Desery</h2>
+-
+-                <section class="food">
+-
+-                    {% for dessert in desserts %}
+-                        <div id="dessert">
+-
+-{#                            <img src="{{'/uploads/' ~ dessert.image}}" class="picture"  data-product_id="{{ dessert.id }}">#}
+-{#                            <span>{{ dessert.name }}</span>#}
+-
+-
+-                        </div>
+-                    {% endfor %}
+-
+-                </section>
+-
+-            </div>
+-
+-
+-            <div class="content" id="napoje">
+-                <h2>Napoje</h2>
+-
+-                <section class="food">
+-
+-                    {% for drink in drinks %}
+-                        <div>
+-
+-                            <img src="{{'/uploads/' ~ drink.image}}" class="picture" data-product_id="{{ drink.id }}">
+-                            <span>{{ drink.name }}</span>
+-
+-                        </div>
+-                    {% endfor %}
+-
+-                </section>
+-            </div>
+-    </div>
+-</div>
+-    </div>
+-</div>
++                    </div>
++                    <div class="describe">
++                        <span class="name"></span><br/>
++                        <span class="price"></span>
++                    </div>
++                </div>
++                </div>
++            </div>
++    </div>
++        </div>
++    </div>
+     </div>
+ 
+     {% block javascripts %}

@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\Company;
 use App\Entity\Food;
 use App\Entity\FoodOrders;
 use App\Entity\Orders;
@@ -49,9 +50,12 @@ class OrderDisplay extends AbstractController
         $id='';
 
         if($orders) {
+
+            $company='';
             foreach ($orders as $order) {
 
                 $food = $order->getProducts();
+                $company=$food->getCompany();
 
                 $temp = array(
                     'id'=>$food->getId(),
@@ -66,16 +70,23 @@ class OrderDisplay extends AbstractController
                 $counter++;
                 $totalPrice+=$food->getPrice();
                 $id=$order->getId();
+                $company=$food->getCompany()->getName();
 
 
 
             }
 
+
             $status= $this->getDoctrine()->getRepository(Orders::class)
                 ->find($id)->getStatus();
+
+
+
+
             $productDetails[$counter]=array(
                 'total_price'=>$totalPrice,
-                'status'=>$status
+                'status'=>$status,
+                'company'=>$company,
 
             );
 

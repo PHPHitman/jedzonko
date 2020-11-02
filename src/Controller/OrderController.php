@@ -34,7 +34,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class OrderController extends AbstractController
     /**
-     * @Route("/order", name="order.")
+     * @Route("{_locale}/order", name="order.")
      */
 {
 
@@ -163,30 +163,49 @@ class OrderController extends AbstractController
             $date = new DateTime();
             $orders = $this->getDoctrine()->getRepository(Orders::class)->findBy(
                 ['Date' => $date]);
-            $food = $this->getDoctrine()->getRepository(Food::class);
+            $company = $this->getDoctrine()->getRepository(Food::class);
 
             $ordersArray = array();
-            $counter = 0;
+            $counter = -1;
+            $userCounter=-1;
             $user = '';
+            $userArray=array();
 
+            $currentUser='';
             foreach ($orders as $order) {
 
                 $food = $order->getProducts();
                 $id=$order->getId();
+                $company=$food->getCompany()->getName();
+
+                $user=$order->getName();
 
 
-                $temp = array(
 
-                    'user' => $order->getName(),
-                    'status' => $order->getStatus(),
+                if($currentUser!=$user) {
+
+                    $currentUser = $user;
+
+                    $userArray = array(
+
+                        'user' => $user,
+                        'status' => $order->getStatus(),
+                        'company'=>$company
+                    );
+
+                    $userCounter++;
+                    $counter=0;
+                }
+                    $productsArray = array(
+
                     'price' => $food->getPrice(),
                     'product' => $food->getName(),
                     'id' => $id
+                    );
+                $userArray['products'][$counter]= $productsArray;
 
-                );
 
-
-                $ordersArray[$counter] = $temp;
+                $ordersArray[$userCounter] = $userArray;
                 $counter++;
             }
 

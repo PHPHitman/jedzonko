@@ -1,5 +1,6 @@
 import $ from "jquery";
 import {swap} from "./SwapDivs";
+import {deleteCompany, deleteOn} from "./companyAction";
 var madeOrderStatus='';
 var productsArray= [];
 var madeOrderArray=[];
@@ -14,10 +15,15 @@ var edit = $('.sidebar').hide();
 
 $(document).ready(function(){
 
-
-
-
-
+    //
+    //
+    // const inputYML = 'input.yml';
+    // const outputJSON = 'output.json';
+    // const yaml = require('js-yaml');
+    // const fs = require('fs');
+    // const obj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
+    //
+    // console.table(obj);
     checkIfOrderExist();
 
 //delete product from order list
@@ -55,6 +61,24 @@ $(document).ready(function(){
     });
 
 });
+
+function getTranslation(){
+    $.ajax({
+            url: '/translation',
+            type: 'POST',
+        success: function (data) {
+
+                alert(data)
+
+            console.log(data['json']);
+    },
+    error : function (xhr, textStatus, errorThrown) {
+        alert(textStatus);
+    }
+    }
+    )
+}
+
 
 function updatePrice(){
     document.getElementById("total_price").innerHTML = productsPrice+' zł';
@@ -101,9 +125,14 @@ function displayElements($status){
         $(document).on('click', '.picture', function(event){
             event.preventDefault();
             event.stopImmediatePropagation();
-            $('.sidebar').show();
 
-            addProductIntoOrder($(this));
+
+                $('.sidebar').show();
+
+                addProductIntoOrder($(this));
+
+                deleteCompany($(this));
+
         });
 
 
@@ -126,7 +155,7 @@ function displayElements($status){
 function checkIfOrderExist(){
 
     $.ajax({
-        url:        'food/check',
+        url:        '/{_locale}/food/check',
         type:       'POST',
             async:false,
 
@@ -156,7 +185,7 @@ export function addProductIntoOrder($product){
     }
 
         $.ajax({
-                url: '/food/add',
+                url: '/{_locale}/food/add',
                 type: 'POST',
                 dataType: 'json',
 
@@ -175,7 +204,9 @@ export function addProductIntoOrder($product){
                         var e = $('<tr>' +
                             '<td><span id="name"></span></td>' +
                             '<td><span id="price">zł</span></td>' +
-                            '<td id="delete"><button class="delete">USUN</button></td>' +
+                            '<td id="delete">' +
+                            '<button class="btn btn-danger btn-sm delete">'+
+                                'X</button></td>' +
                             '</tr>');
 
                         $('#table').append(e);
@@ -249,7 +280,7 @@ function putIdIntoDeleteProduct($id){
 function sendIdArray() {
 
     $.ajax({
-        url:        '/food/save',
+        url:        '/{_locale}/food/save',
         type:       'POST',
         async:false,
         data: {
@@ -278,7 +309,7 @@ function displayMadeOrders() {
 
     $('#orders').children().remove();
     $.ajax({
-        url:        '/food/show',
+        url:        '/{_locale}/food/show',
         type:       'POST',
         dataType:   'json',
         async:false,
@@ -295,13 +326,18 @@ function displayMadeOrders() {
 
 
                 if(i===data.length-1){
-                    var e=$('<tr class="table-info">' +
-                        '<td><span id="total">Podsumowanie</span></td>'+
-                        '<td><span id="total_price"></span></td>'+
+                    var e=$(
+                        '<tr class="table-info">' +
+                            '<td><span><section>{%trans%}</section>Podsumowanie<section>{%endtrans%}</section></span></td>'+
+                            '<td><span id="total_price"></span></td>'+
                         '</tr>'+
                         '<tr class="status">' +
-                        '<td><span id="total">Status</span></td>'+
-                        '<td><span id="status"></span></td>'+
+                            '<td><span>Status</span></td>'+
+                            '<td><span id="status"></span></td>'+
+                        '</tr>'+
+                        '<tr>' +
+                             '<td><span>Firma</span></td>'+
+                             '<td><span id="company_order"></span></td>'+
                         '</tr>'
 
                     );
@@ -309,6 +345,7 @@ function displayMadeOrders() {
                     $('#total_price', e).append().html(food['total_price']+'zł');
 
                     $('#status', e).append().html(orderStatus);
+                    $('#company_order', e).append().html(food.company);
                     madeOrderStatus=orderStatus;
 
 
@@ -354,7 +391,7 @@ function setStatus($isExist){
 //delete all from Order
 function deleteAllFromOrder(){
     $.ajax({
-        url: '/order/delete/all',
+        url: '/{_locale}/order/delete/all',
         type: 'POST',
         async:false,
 
@@ -403,7 +440,7 @@ function addMadeProductsIntoOrder(product){
 
 
         $.ajax({
-                url: '/food/add',
+                url: '/{_locale}/food/add',
                 type: 'POST',
                 dataType: 'json',
 
@@ -423,7 +460,8 @@ function addMadeProductsIntoOrder(product){
                         var e = $('<tr>' +
                             '<td><span id="name"></span></td>' +
                             '<td><span id="price">zł</span></td>' +
-                            '<td id="delete"><button class="delete_made">USUN</button></td>' +
+                            '<td id="delete"><button class="btn btn-danger delete_made">' +
+                            'X</button></td>' +
                             '</tr>');
 
                         $('#table').append(e);

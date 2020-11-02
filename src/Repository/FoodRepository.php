@@ -41,9 +41,39 @@ class FoodRepository extends ServiceEntityRepository
                 Return $array;
         }
 
+    public function selectProducts($search){
+
+        $queryBuilder = $this->createQueryBuilder('f')
+            ->leftJoin('company', 'c', 'WHERE', 'c.id = f.company_id')
+            ->where('c.name = :name')
+            ->setParameter('name',$search)
+            ->getQuery()
+            ->getResult();
 
 
-public function findProducts(Request $request){
+        $food = array();
+        $counter=0;
+        foreach($queryBuilder as $query) {
+
+            $array = array(
+                'id' => $query->getId(),
+                'name' => $query->getName(),
+                'price' => $query->getPrice(),
+                'image' => $query->getImage(),
+                'category'=>$query->getCategory()
+
+            );
+            $food[$counter]=$array;
+
+
+        }
+        Return $food;
+    }
+
+
+
+
+    public function findProducts(Request $request){
 
 
 }

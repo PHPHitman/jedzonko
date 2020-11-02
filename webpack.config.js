@@ -34,8 +34,8 @@ Encore
     .addEntry('orders', './assets/js/displayOrdersForAdmin.js')
     .addEntry('search', './assets/js/search.js')
     .addEntry('swap', './assets/js/SwapDivs.js')
-    .addEntry('edit', './assets/js/editMadeOrders.js')
     .addEntry('category', './assets/js/selectCategory.js')
+    .addEntry('company', './assets/js/companyAction.js')
 
 
     //.addEntry('page1', './assets/page1.js')

@@ -35,7 +35,6 @@ class Orders
      */
     private $Products;
 
-
     /**
      * @ORM\Column(type="string", length=255)
      */

@@ -5,6 +5,8 @@ var searchedId=null;
 var box = document.getElementById('searchbox');
 
 
+
+import {currentCompany} from "./selectCategory";
 $(document).ready(function(){
 
     box.addEventListener('input', function (){
@@ -15,21 +17,22 @@ $(document).ready(function(){
         }else {
             $('.describe').show();
             searchedDiv.show();
-            searchFood(text);
+            searchFood(text, currentCompany);
         }
     });
 })
 
-function searchFood(text){
+function searchFood(text, company){
 
         $.ajax({
-                url:        'food/search',
+                url:        '/{_locale}/food/search',
                 type:       'POST',
             // dataType: 'json',
             async:false,
 
             data:{
-                search: text
+                search: text,
+                company: company
             },
                 success: function (data) {
 

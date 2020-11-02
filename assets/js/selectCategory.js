@@ -1,27 +1,50 @@
 import $ from "jquery";
-import {slick} from "./slick";
+import {deleteCompany} from "./companyAction";
 
-var currentCompany=null;
+
+
+var deleteOn=false;
+export var currentCompany=null;
+
+
+$(document).on('click', '#nav_delete_company', function(){
+    deleteOn=true;
+})
+
 $(document).ready(function (){
 
+    selectProductsByCompany('Rzeszowskie kulinaria');
+
     $('.category_card').on('click', function () {
-
         var companyId = $(this).attr('id');
-            if(currentCompany!==companyId) {
 
-                selectProductsByCompany(companyId);
-                currentCompany = companyId;
+
+        if(!deleteOn) {
+
+            $('.food').remove();
+            selectProductsByCompany(companyId);
+        }else{
+
+            var r = confirm("Usunąć firmę?");
+            if (r == true) {
+                deleteCompany(companyId);
+                alert('Firma została usunięta')
             }
 
+    debugger
+
+        }
     })
 
 });
 
 function selectProductsByCompany(company){
 
+    document.getElementById("company_label").innerHTML = company;
+    currentCompany = company;
 
     $.ajax({
-            url:        'food/category',
+            url:        '/{_locale}/food/category',
             type:       'POST',
 
         data:{
@@ -30,13 +53,11 @@ function selectProductsByCompany(company){
         },
 
             success: function (data) {
+            if(!data){
+
+            }
 
 
-$(".food").remove();
-
-
-            //     var e=$('<section class="food"></section>');
-            // $('.content').append(e)
         var foodCategory='';
                 for(var i=0; i<data.length; i++){
 
@@ -50,19 +71,19 @@ $(".food").remove();
 
 
                         var e = $(
-                            // '<section class="food">'+
-                        //     '<div>'+
-                        //         '<div>'+
+                            '<section class="food">'+
+                            '<div>'+
+
                                      '<img id="card">'+
-                                      // '<span id="name"></span><br/>'+
-                                      //  '<span id="price"></span>'
-                            //     '</div>'+
-                            // '</div>'+
-                            // '</section>'
+                                      '<span id="name"></span>'+
+                                       '<span id="price"></span>'+
+
+                            '</div>'+
+                            '</section>'
 
                         )
 
-                        $('#picture').append(e);
+                        $('.content').append(e);
                         e.attr('id',category);
 
                     $('#card').attr({
@@ -75,16 +96,15 @@ $(".food").remove();
                                 });
 
                     // $('#card').parent().data('price',price)
-
-                        $('#name',e).append().html(name);
-                        $('#price',e).append().html(price+' zł');
+                        $('#name',e).append().html(product['name']);
+                        $('#price',e).append().html(''+price+' zł');
 
                     // $('.slider').slick('slickRemove', $('.slick-slide').index(this) - 1);
-                    slick();
+
 
                 }
                 // document.getElementById('content').style.width = '0px';
-                slick();
+
 
             },
             error : function (xhr, textStatus, errorThrown) {

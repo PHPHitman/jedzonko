@@ -25,6 +25,11 @@ class Company
     private $name;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $phone;
+
+    /**
      * @ORM\OneToMany (targetEntity=Food::class, mappedBy="company")
      */
 
@@ -48,5 +53,17 @@ class Company
 
     public function __toString() {
         return $this->name;
+    }
+
+    public function getPhone(): ?int
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?int $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
     }
 }

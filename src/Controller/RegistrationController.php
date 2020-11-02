@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/register", name="register")
+     * @Route("{_locale}/register", name="register")
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @return \Symfony\Component\HttpFoundation\Response
@@ -48,11 +48,14 @@ class RegistrationController extends AbstractController
             $em->persist($user);
             $em->flush();
 
+
         }
 
         return $this->render('registration/index.html.twig', [
             //przesyła formę
             'form' =>$form->createView()
         ]);
+
     }
+
 }
