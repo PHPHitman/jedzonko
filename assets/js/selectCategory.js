@@ -6,6 +6,7 @@ import {deleteCompany} from "./companyAction";
 var deleteOn=false;
 export var currentCompany=null;
 
+export var currentsubcategory=null;
 
 $(document).on('click', '#nav_delete_company', function(){
     deleteOn=true;
@@ -13,7 +14,7 @@ $(document).on('click', '#nav_delete_company', function(){
 
 $(document).ready(function (){
 
-    selectProductsByCompany('Rzeszowskie kulinaria');
+    selectProductsByCompany('Kebabownia', "Dania");
 
     $('.category_card').on('click', function () {
         var companyId = $(this).attr('id');
@@ -22,7 +23,7 @@ $(document).ready(function (){
         if(!deleteOn) {
 
             $('.food').remove();
-            selectProductsByCompany(companyId);
+            selectProductsByCompany(companyId,currentsubcategory);
         }else{
 
             var r = confirm("Usunąć firmę?");
@@ -36,12 +37,20 @@ $(document).ready(function (){
         }
     })
 
+    $('.subcategory_card').on('click', function () {
+        $('.food').remove();
+        currentsubcategory = $(this).attr('id');
+        selectProductsByCompany(currentCompany, currentsubcategory);
+
+    })
+
 });
 
-function selectProductsByCompany(company){
+function selectProductsByCompany(company, subcategory){
 
     document.getElementById("company_label").innerHTML = company;
     currentCompany = company;
+    currentsubcategory = subcategory;
 
     $.ajax({
             url:        '/{_locale}/food/category',
@@ -49,6 +58,7 @@ function selectProductsByCompany(company){
 
         data:{
             company:company,
+            subcategory:subcategory,
 
         },
 
@@ -56,48 +66,45 @@ function selectProductsByCompany(company){
             if(!data){
 
             }
-
-
         var foodCategory='';
-                for(var i=0; i<data.length; i++){
+                for(var i=0; i<data.length; i++) {
 
 
                     var product = data[i];
-                    var id=product.id;
-                    var name=product.name;
+                    var id = product.id;
+                    var name = product.name;
                     var price = product.price;
-                    var category =product.catName;
+                    var category = product.catName;
                     var image = product.image;
 
 
                         var e = $(
-                            '<section class="food">'+
-                            '<div>'+
+                            '<section class="food">' +
+                            '<div>' +
 
-                                     '<img id="card">'+
-                                      '<span id="name"></span>'+
-                                       '<span id="price"></span>'+
+                            '<img id="card">' +
+                            '<span id="name"></span>' +
+                            '<span id="price"></span>' +
 
-                            '</div>'+
+                            '</div>' +
                             '</section>'
-
                         )
 
-                        $('.content').append(e);
-                        e.attr('id',category);
+                    $('.content').append(e);
+                    e.attr('id', category);
 
                     $('#card').attr({
-                        src:'/uploads/'+image,
-                        class:'picture',
-                        id:id,
+                        src: '/uploads/' + image,
+                        class: 'picture',
+                        id: id,
 
                     }).data({
-                        product_id:id,
-                                });
+                        product_id: id,
+                    });
 
                     // $('#card').parent().data('price',price)
-                        $('#name',e).append().html(product['name']);
-                        $('#price',e).append().html(''+price+' zł');
+                    $('#name', e).append().html(product['name']);
+                    $('#price', e).append().html('' + price + ' zł');
 
                     // $('.slider').slick('slickRemove', $('.slick-slide').index(this) - 1);
 

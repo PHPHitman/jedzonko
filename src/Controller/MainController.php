@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Company;
 use App\Entity\Food;
 use App\Service\FoodDisplay;
@@ -36,10 +37,14 @@ class MainController extends AbstractController
 
         $companies =$this->getDoctrine()->getRepository(Company::class)
             ->findAll();
+        $categories =$this->getDoctrine()->getRepository(Category::class)
+            ->findAll();
+
 
 
         return $this->render('main/index.html.twig',[
-            'companies' => $companies
+            'companies' => $companies,
+            'categories' =>$categories
         ]);
 
 

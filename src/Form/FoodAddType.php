@@ -28,9 +28,11 @@ class FoodAddType extends AbstractType
                 'label' =>'Podaj cenę'
             ])
             ->add('picture', FileType::class,[
+                'label' =>'Zdjecie',
                 'mapped' => false
             ])
             ->add('category', EntityType::class,[
+                'label' =>'Kategoria',
                 'class' => Category::class
             ])
             ->add('company', EntityType::class,[
@@ -38,6 +40,7 @@ class FoodAddType extends AbstractType
                 'label' =>'Firma'
             ])
             ->add('submit', SubmitType::class,[
+                'label' =>'Dodaj',
                 'attr' =>[
                 'class' =>'btn btn-primary float-right'
             ]])

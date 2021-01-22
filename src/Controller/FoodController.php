@@ -238,26 +238,30 @@ class FoodController extends AbstractController
 
 
             $company=$_POST['company'];
+            $category=$_POST['subcategory'];
 
 //            $products=$foodRepository->selectProducts($company);
 //
 
-            $em = $this->getDoctrine()->getManager();
 
-            $RAW_QUERY = 'SELECT f.* ,ct.name AS catName  FROM Food AS f LEFT JOIN Company c ON f.company_id=c.id LEFT JOIN category ct ON f.category_id=ct.id WHERE c.name=:company ';
+                $em = $this->getDoctrine()->getManager();
 
-            $statement = $em->getConnection()->prepare($RAW_QUERY);
-            $statement->bindParam(':company',$company);
-            $statement->execute();
-            $result = $statement->fetchAll();
+                $RAW_QUERY = 'SELECT f.* ,ct.name AS catName  FROM Food AS f LEFT JOIN Company c ON f.company_id=c.id LEFT JOIN category ct ON f.category_id=ct.id WHERE c.name=:company AND ct.name=:category ';
+
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->bindParam(':company', $company);
+                $statement->bindParam(':category', $category);
+                $statement->execute();
+                $result = $statement->fetchAll();
+            }
             if($result) {
                 return new JsonResponse($result);
-            }
-            return new JsonResponse(false);
+
+
 
         }else{
 
-            Return new JsonResponse('Wystąpił błąd');
+                return new JsonResponse(false);
 
         }
     }

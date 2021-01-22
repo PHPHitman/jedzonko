@@ -328,7 +328,7 @@ function displayMadeOrders() {
                 if(i===data.length-1){
                     var e=$(
                         '<tr class="table-info">' +
-                            '<td><span><section>{%trans%}</section>Podsumowanie<section>{%endtrans%}</section></span></td>'+
+                            '<td><span><section></section>Podsumowanie<section></section></span></td>'+
                             '<td><span id="total_price"></span></td>'+
                         '</tr>'+
                         '<tr class="status">' +

@@ -6,19 +6,19 @@
 <div class="body_container">
 
 
-    {% for locale in ['en', 'fr','pl'] %}
+{#    {% for locale in ['en', 'fr','pl'] %}#}
 
-        <li>
-            <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale' : locale})) }}">
-                {% if locale == 'en' %}
-                       <img title="English" src="{{ asset('bundles/fkmywebsite/images/UnitedStates.png') }}" alt="English" height="30" width="30"/>
-                   {% elseif locale == 'pl' %}
-                    <img title="Polish" src="{{ asset('bundles/fkmywebsite/images/France.png') }}" alt="Polish" height="30" width="30"/>
-                {% endif %}
-            </a>
-        </li>
+{#        <li>#}
+{#            <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale' : locale})) }}">#}
+{#                {% if locale == 'en' %}#}
+{#                       <img title="English" src="{{ asset('bundles/fkmywebsite/images/UnitedStates.png') }}" alt="English" height="30" width="30"/>#}
+{#                   {% elseif locale == 'pl' %}#}
+{#                    <img title="Polish" src="{{ asset('bundles/fkmywebsite/images/France.png') }}" alt="Polish" height="30" width="30"/>#}
+{#                {% endif %}#}
+{#            </a>#}
+{#        </li>#}
 
-    {% endfor %}
+{#    {% endfor %}#}
 
     <div class="row">
         <div class="col-12 col-lg-4">
@@ -133,6 +133,18 @@
 
                 </div>
             </div>
+            <div class="subcategory">
+                <div class="row">
+
+                    {% for category in categories %}
+                        <div class="col-6 col-sm-4 col-xl-3">
+                            <button class=" btn btn-info subcategory_card" id="{{ category.name}}">{{ category.name }}</button>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
 
             <div class="searchbox">
                 <div class="row">
@@ -153,8 +165,10 @@
                     </div>
                 </div>
             </div>
+            <span id="cat_description"></span>
             <div class = "row">
                 <div class="col">
+
                     <div class="content" id="dania">
                         <h2 id="company_label"></h2>
                     </div>

@@ -6,8 +6,13 @@
 
 body {
 background-color: #aacd4e;
+    margin:0;
 }
 
+.body_container .row{
+    max-width: 100%;
+    padding:0;
+}
 .container{
 
 
@@ -45,7 +50,7 @@ background-color: #aacd4e;
 .food img{
     margin: auto;
     width:10vw;
-    height: 10vw;
+    height: 7vw;
 }
 .food img:hover{
     cursor: pointer;
@@ -200,4 +205,19 @@ margin:0 !important;
 
     margin: 30px !important;
 
+}
+.food_container{
+    width: 100%;
+}
+.subcategory .row{
+    justify-content: center;
+}
+.subcategory .btn{
+    width:80%;
+    min-height: 60px;
+    transition: transform 0.3s ease-in-out;
+}
+.subcategory .btn:hover{
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
 }

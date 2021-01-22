@@ -68,9 +68,9 @@
                     <li>
                         <a class="nav-link" href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale' : locale})) }}">
                             {% if locale == 'en' %}
-                                <img title="{% trans %}Angielski{% endtrans %}" src="{{ asset('bundles/easyadmin/images/flags/gb.png') }}" alt="Angielski" height="30" width="30"/>
+                                <img title="{% trans %}Angielski{% endtrans %}" src="{{ asset('build/uk.svg') }}" alt="Angielski" height="30" width="30"/>
                             {% elseif locale == 'pl' %}
-                                <img title="{% trans %}Polski{% endtrans %}" src="{{ asset('bundles/easyadmin/images/flags/pl.png') }}" alt="Polski" height="30" width="30"/>
+                                <img title="{% trans %}Polski{% endtrans %}" src="{{ asset('build/pl.svg') }}" alt="Polski" height="30" width="30"/>
                             {% endif %}
                         </a>
                     </li>
